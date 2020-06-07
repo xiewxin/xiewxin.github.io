@@ -1,22 +1,110 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>http://xiewxin.github.io/</id>
-    <title>xiewixn blog</title>
-    <updated>2020-06-07T09:12:28.923Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="http://xiewxin.github.io/"/>
-    <link rel="self" href="http://xiewxin.github.io/atom.xml"/>
-    <subtitle>闲庭若步</subtitle>
-    <logo>http://xiewxin.github.io/images/avatar.png</logo>
-    <icon>http://xiewxin.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, xiewixn blog</rights>
-    <entry>
-        <title type="html"><![CDATA[辅助函数]]></title>
-        <id>http://xiewxin.github.io/post/fu-zhu-han-shu/</id>
-        <link href="http://xiewxin.github.io/post/fu-zhu-han-shu/">
-        </link>
-        <updated>2020-06-07T09:10:43.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="可用方法">可用方法</h2>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>辅助函数 | xiewixn blog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="http://xiewxin.github.io//favicon.ico?v=1591521142154">
+<link rel="stylesheet" href="http://xiewxin.github.io//styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="可用方法
+数组&amp;对象
+Arr::add
+Arr::collapse
+Arr::crossJoin
+Arr::divide
+Arr::dot
+Arr::except
+Arr::first
+Arr::flatten
+Arr::forge..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="http://xiewxin.github.io/">
+        <img src="http://xiewxin.github.io//images/avatar.png?v=1591521142154" class="site-logo">
+        <h1 class="site-title">xiewixn blog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      闲庭若步
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/xiewxin/xiewxin.github.io" target="_blank">xiewxin/xiewxin.github.io</a> | <a class="rss" href="http://xiewxin.github.io//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">辅助函数</h2>
+            <div class="post-date">2020-06-07</div>
+            
+            <div class="post-content" v-pre>
+              <h2 id="可用方法">可用方法</h2>
 <h3 id="数组对象">数组&amp;对象</h3>
 <p>Arr::add<br>
 Arr::collapse<br>
@@ -524,6 +612,37 @@ $last = last($array);
 
 // 300
 </code></pre>
-]]></content>
-    </entry>
-</feed>
+
+            </div>
+            
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>
