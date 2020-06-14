@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://xiewxin.github.io/</id>
     <title>xiewixn blog</title>
-    <updated>2020-06-07T09:13:04.117Z</updated>
+    <updated>2020-06-14T17:19:50.461Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="http://xiewxin.github.io/"/>
     <link rel="self" href="http://xiewxin.github.io/atom.xml"/>
@@ -16,7 +16,8 @@
         <link href="http://xiewxin.github.io/post/fu-zhu-han-shu/">
         </link>
         <updated>2020-06-07T09:10:43.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="可用方法">可用方法</h2>
+        <content type="html"><![CDATA[<h1 id="辅助函数">辅助函数</h1>
+<h2 id="可用方法">可用方法</h2>
 <h3 id="数组对象">数组&amp;对象</h3>
 <p>Arr::add<br>
 Arr::collapse<br>
@@ -48,6 +49,51 @@ data_get<br>
 data_set<br>
 head<br>
 last</p>
+<h3 id="路徑">路徑</h3>
+<p>app_path<br>
+base_path<br>
+config_path<br>
+database_path<br>
+mix<br>
+public_path</p>
+<p>resource_path</p>
+<p>storage_path</p>
+<h3 id="字符串">字符串</h3>
+<p>__</p>
+<p>class_basename<br>
+e<br>
+preg_replace_array<br>
+Str::after<br>
+Str::afterLast<br>
+Str::before<br>
+Str::beforeLast<br>
+Str::camel<br>
+Str::contains<br>
+Str::containsAll<br>
+Str::endsWith<br>
+Str::finish<br>
+Str::is<br>
+Str::isUuid<br>
+Str::kebab<br>
+Str::limit<br>
+Str::orderedUuid<br>
+Str::plural<br>
+Str::random<br>
+Str::replaceArray<br>
+Str::replaceFirst<br>
+Str::replaceLast<br>
+Str::singular</p>
+<p>Str::slug<br>
+Str::snake<br>
+Str::start<br>
+Str::startsWith<br>
+Str::studly<br>
+Str::title<br>
+Str::ucfirst<br>
+Str::uuid<br>
+Str::words<br>
+trans<br>
+trans_choice</p>
 <h2 id="方法列表">方法列表</h2>
 <h3 id="数组对象-2">数组&amp;对象</h3>
 <h4 id="arradd-collection-method-first-collection-method"><code>Arr::add()</code> {#collection-method .first-collection-method}</h4>
@@ -523,6 +569,295 @@ $first = head($array);
 $last = last($array);
 
 // 300
+</code></pre>
+<h3 id="路徑-2">路徑</h3>
+<h4 id="app_path-collection-method"><code>app_path()</code> {#collection-method}</h4>
+<p><code>app_path</code> 函数返回 <code>app</code> 目录的完整路径。 你也可以用 <code>app_path</code> 函数去生成应用程序目录下一个文件的完整路径：</p>
+<pre><code>$path = app_path();
+
+$path = app_path('Http/Controllers/Controller.php');
+</code></pre>
+<h4 id="base_path-collection-method"><code>base_path()</code> {#collection-method}</h4>
+<p><code>base_path</code> 函数返回项目根目录的完整路径。 你也可以用 <code>base_path</code> 函数生成项目根目录下一个文件的完整路径：</p>
+<pre><code>$path = base_path();
+
+$path = base_path('vendor/bin');
+</code></pre>
+<h4 id="config_path-collection-method"><code>config_path()</code> {#collection-method}</h4>
+<p><code>config_path</code> 函数返回 <code>config</code> 目录的完整路径。你也可以用 <code>config_path</code> 函数去生成应用程序配置目录下一个指定文件的完整路径：</p>
+<pre><code>$path = config_path();
+
+$path = config_path('app.php');
+</code></pre>
+<h4 id="database_path-collection-method"><code>database_path()</code> {#collection-method}</h4>
+<p><code>database_path</code> 函数返回 <code>database</code> 目录的完整路径。 你也可以用 <code>database_path</code> 函数去生成 <code>database</code>目录下一个指定文件的完整路径：</p>
+<pre><code>$path = database_path();
+
+$path = database_path('factories/UserFactory.php');
+</code></pre>
+<h4 id="mix-collection-method"><code>mix()</code> {#collection-method}</h4>
+<p><code>mix</code> 返回 <a href="https://learnku.com/docs/laravel/7.x/mix">版本化 MIX 文件</a> 的路径:</p>
+<pre><code>$path = mix('css/app.css');
+</code></pre>
+<h4 id="public_path-collection-method"><code>public_path()</code> {#collection-method}</h4>
+<p><code>public_path</code> 函数返回 <code>public</code> 目录的完整路径。 你也可以用 <code>public_path</code> 函数去生成 <code>public</code> 目录下一个指定文件的完整路径：</p>
+<pre><code>$path = public_path();
+
+$path = public_path('css/app.css');
+</code></pre>
+<h4 id="resource_path-collection-method"><code>resource_path()</code> {#collection-method}</h4>
+<p><code>resource_path</code> 函数返回 <code>resources</code> 目录的完整路径。你也可以用 <code>resource_path</code> 函数去生成资源文件目录下的一个指定文件的完整路径：</p>
+<pre><code>$path = resource_path();
+
+$path = resource_path('sass/app.scss');
+</code></pre>
+<h4 id="storage_path"><code>storage_path()</code></h4>
+<p><code>storage_path</code> 函数返回指向 “storage” 目录的绝对路径。还可以使用 <code>storage_path</code> 函数生成 <code>storage</code> 目录下给定文件的完整路径：</p>
+<pre><code>$path = storage_path();
+
+$path = storage_path('app/file.txt');
+</code></pre>
+<h3 id="字符串函数">字符串函数</h3>
+<h4 id="__"><code>__()</code></h4>
+<p><code>__</code>函数可使用 本地化文件 翻译指定的字符串或者键值：</p>
+<pre><code>echo __('Welcome to our application');
+
+echo __('messages.welcome');
+</code></pre>
+<p>如果指定的转换字符串或键不存在，<code>__</code> 函数将返回原来的值。即：如果 <code>messages.welcome</code> 键值不存在，则返回 <code>messages.welcome</code>。</p>
+<h4 id="e"><code>e()</code></h4>
+<p><code>e</code> 函数在指定字符串上运行 htmlentities 方法（double_encode 参数为 false）：</p>
+<pre><code>echo e('&lt;html&gt;foo&lt;/html&gt;');
+
+// &amp;lt;html&amp;gt;foo&amp;lt;/html&amp;gt;
+</code></pre>
+<h4 id="preg_replace_array"><code>preg_replace_array()</code></h4>
+<p><code>preg_replace_array</code> 函数使用正则规则用给定数组替换字符串中的内容：</p>
+<pre><code>$string = 'The event will take place between :start and :end';
+
+$replaced = preg_replace_array('/:[a-z_]+/', ['8:30', '9:00'], $string);
+
+// The event will take place between 8:30 and 9:00
+</code></pre>
+<h4 id="strafter"><code>Str::after()</code></h4>
+<p><code>Str::after</code> 方法返回字符串中给定值之后的所有内容。如果字符串中不存在该值，则将返回整个字符串：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$slice = Str::after('This is my name', 'This is');
+
+// ' my name'
+</code></pre>
+<h4 id="strafterlast"><code>Str::afterLast()</code></h4>
+<p><code>Str::afterLast</code> 方法返回字符串中给定值最后一次出现后的所有内容。如果字符串中不存在该值，则将返回整个字符串：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$slice = Str::afterLast('App\Http\Controllers\Controller', '\\');
+
+// 'Controller'
+</code></pre>
+<h4 id="strbefore-collection-method"><code>Str::before()</code> {#collection-method}</h4>
+<p><code>Str::before</code> 方法返回字符串中给定值之前的所有内容：use Illuminate\Support\Str;</p>
+<pre><code>$slice = Str::before('This is my name', 'my name');
+
+// 'This is '
+</code></pre>
+<h4 id="strbeforelast"><code>Str::beforeLast()</code></h4>
+<p><code>Str::beforeLast</code> 方法返回字符串中给定值最后出现之前的所有内容：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$slice = Str::beforeLast('This is my name', 'is');
+
+// 'This '
+</code></pre>
+<h4 id="strcamel"><code>Str::camel()</code></h4>
+<p><code>Str::camel</code> 方法将给定字符串转换为 <code>camelCase</code>（驼峰式）：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$converted = Str::camel('foo_bar');
+
+// fooBar
+</code></pre>
+<h4 id="strcontains-collection-method"><code>Str::contains()</code> {#collection-method}</h4>
+<p><code>Str::contains</code> 方法判断给定的字符串是否包含给定的值（区分大小写）：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$contains = Str::contains('This is my name', 'my');
+
+// true
+</code></pre>
+<p>你也可以传递一个数组形式的值来判断给定的字符串中是否包含数组中的任意一个值：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$contains = Str::contains('This is my name', ['my', 'foo']);
+
+// true
+</code></pre>
+<h4 id="strcontainsall-collection-method"><code>Str::containsAll()</code> {#collection-method}</h4>
+<p><code>Str::containsAll</code> 方法判断给定的字符串中是否包含给定的数组中所有的值：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$containsAll = Str::containsAll('This is my name', ['my', 'name']);
+
+// true
+</code></pre>
+<h4 id="strendswith-collection-method"><code>Str::endsWith()</code> {#collection-method}</h4>
+<p><code>Str::endsWith</code> 方法判断给定的字符串是否以给定的值结尾：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$result = Str::endsWith('This is my name', 'name');
+
+// true
+</code></pre>
+<p>你也可以传递一个数组形式的值来判断给定的字符串是否以数组中的任意一个值结尾：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$result = Str::endsWith('This is my name', ['name', 'foo']);
+
+// true
+
+$result = Str::endsWith('This is my name', ['this', 'foo']);
+
+// false
+</code></pre>
+<h4 id="strfinish-collection-method"><code>Str::finish()</code> {#collection-method}</h4>
+<p><code>Str::finish</code> 方法将给定的字符串以给定的值结尾返回（如果该字符串尚未以该值结尾）：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$adjusted = Str::finish('this/string', '/');
+
+// this/string/
+
+$adjusted = Str::finish('this/string/', '/');
+
+// this/string/
+</code></pre>
+<h4 id="stris-collection-method"><code>Str::is()</code> {#collection-method}</h4>
+<p><code>Str::is</code> 方法判断给定的字符串是否匹配给定的模式，星号 <code>*</code> 可以用来表示通配符：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$matches = Str::is('foo*', 'foobar');
+
+// true
+
+$matches = Str::is('baz*', 'foobar');
+
+// false
+</code></pre>
+<h4 id="strucfirst-collection-method"><code>Str::ucfirst()</code> {#collection-method}</h4>
+<p><code>Str::ucfirst</code> 方法将给定的字符串首字母大写并返回：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$string = Str::ucfirst('foo bar');
+
+// Foo bar
+</code></pre>
+<h4 id="strisuuid-collection-method"><code>Str::isUuid()</code> {#collection-method}</h4>
+<p><code>Str::isUuid</code> 方法用来确定给定的字符串是否为有效的 UUID：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$isUuid = Str::isUuid('a0a2a2d2-0b87-4a18-83f2-2529882be2de');
+
+// true
+
+$isUuid = Str::isUuid('laravel');
+
+// false
+</code></pre>
+<h4 id="strkebab-collection-method"><code>Str::kebab()</code> {#collection-method}</h4>
+<p><code>Str::kebab</code> 方法将给定的「驼峰式」字符串转化为 kebab-case「短横式」字符串</p>
+<pre><code>use Illuminate\Support\Str;
+
+$converted = Str::kebab('fooBar');
+
+// foo-bar
+</code></pre>
+<h4 id="strlimit-collection-method"><code>Str::limit()</code> {#collection-method}</h4>
+<p><code>Str::limit</code> 方法按给定的长度截断给定的字符串：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$truncated = Str::limit('The quick brown fox jumps over the lazy dog', 20);
+
+// The quick brown fox...
+</code></pre>
+<p>你也可以传递第三个参数来改变将被追加到最后的字符串：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$truncated = Str::limit('The quick brown fox jumps over the lazy dog', 20, ' (...)');
+
+// The quick brown fox (...)
+</code></pre>
+<h4 id="strordereduuid-collection-method"><code>Str::orderedUuid()</code> {#collection-method}</h4>
+<p><code>Str::orderedUuid</code> 方法高效生成一个可存储在索引数据库列中的「第一时间」 UUID：</p>
+<pre><code>use Illuminate\Support\Str;
+
+return (string) Str::orderedUuid();
+</code></pre>
+<h4 id="strplural-collection-method"><code>Str::plural()</code> {#collection-method}</h4>
+<p><code>Str::plural</code> 函数将字符串转换为复数形式。该函数目前仅支持英文</p>
+<pre><code>use Illuminate\Support\Str;
+
+$plural = Str::plural('car');
+
+// cars
+
+$plural = Str::plural('child');
+
+// children
+</code></pre>
+<p>你可以提供一个整数作为函数的第二个参数来检索字符串的单数或复数形式：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$plural = Str::plural('child', 2);
+
+// children
+
+$plural = Str::plural('child', 1);
+
+// child
+</code></pre>
+<h4 id="strrandom-collection-method"><code>Str::random()</code> {#collection-method}</h4>
+<p><code>Str::random</code> 函数生成一个指定长度的随机字符串。这个函数用 PHP 的 <code>random_bytes</code> 函数：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$random = Str::random(40);
+</code></pre>
+<h4 id="strreplacearray-collection-method"><code>Str::replaceArray()</code> {#collection-method}</h4>
+<p><code>Str::replaceArray</code> 函数使用数组顺序替换字符串中的给定值：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$string = 'The event will take place between ? and ?';
+
+$replaced = Str::replaceArray('?', ['8:30', '9:00'], $string);
+
+// 活动将在 8:30 至 9:00 之间进行
+</code></pre>
+<h4 id="strreplacefirst-collection-method"><code>Str::replaceFirst()</code> {#collection-method}</h4>
+<p><code>Str::replaceFirst</code> 函数替换字符串中给定值的第一个匹配项：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$replaced = Str::replaceFirst('the', 'a', 'the quick brown fox jumps over the lazy dog');
+
+// a quick brown fox jumps over the lazy dog
+</code></pre>
+<h4 id="strreplacelast-collection-method"><code>Str::replaceLast()</code> {#collection-method}</h4>
+<p><code>Str::replaceLast</code> 函数替换字符串中最后一次出现的给定值：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$replaced = Str::replaceLast('the', 'a', 'the quick brown fox jumps over the lazy dog');
+
+// the quick brown fox jumps over a lazy dog
+</code></pre>
+<h4 id="strsingular-collection-method"><code>Str::singular()</code> {#collection-method}</h4>
+<p><code>Str::singular</code> 函数将字符串转换为单数形式。该函数目前仅支持英文：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$singular = Str::singular('cars');
+
+// car
+
+$singular = Str::singular('children');
+
+// child
 </code></pre>
 ]]></content>
     </entry>
