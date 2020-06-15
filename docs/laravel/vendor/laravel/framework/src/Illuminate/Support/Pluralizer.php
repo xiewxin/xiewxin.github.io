@@ -69,12 +69,15 @@ class Pluralizer
      */
     public static function plural($value, $count = 2)
     {
+        // 絕對值等於1或不可計數是直接返回原值
         if ((int) abs($count) === 1 || static::uncountable($value)) {
             return $value;
         }
 
+        // 返回該值得負數形式
         $plural = static::inflector()->pluralize($value);
 
+        // 如符合固定格式則直接返回，否則返回原值
         return static::matchCase($plural, $value);
     }
 

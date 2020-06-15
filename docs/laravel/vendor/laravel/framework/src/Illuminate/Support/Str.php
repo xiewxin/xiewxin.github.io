@@ -61,6 +61,7 @@ class Str
      */
     public static function after($subject, $search)
     {
+        // 在設定搜尋值得情況，以搜尋值將字符串分成兩部分並返回搜尋值後的內容
         return $search === '' ? $subject : array_reverse(explode($search, $subject, 2))[0];
     }
 
@@ -73,16 +74,20 @@ class Str
      */
     public static function afterLast($subject, $search)
     {
+        // 搜尋值為空返回字符串本身
         if ($search === '') {
             return $subject;
         }
 
+        // 獲取搜尋值最後出現的位置
         $position = strrpos($subject, (string) $search);
 
+        // 不存在與字符串中則返回自身
         if ($position === false) {
             return $subject;
         }
 
+        // 返回搜尋值最後出現的地方後面的內容
         return substr($subject, $position + strlen($search));
     }
 
@@ -107,6 +112,7 @@ class Str
      */
     public static function before($subject, $search)
     {
+        // 返回搜尋值前面的內容
         return $search === '' ? $subject : explode($search, $subject)[0];
     }
 
@@ -119,16 +125,20 @@ class Str
      */
     public static function beforeLast($subject, $search)
     {
+        // 搜尋值為空返回字符串本身
         if ($search === '') {
             return $subject;
         }
 
+        // 獲取搜尋值最後出現的地方
         $pos = mb_strrpos($subject, $search);
 
+        // 不存在則返回字符串本身
         if ($pos === false) {
             return $subject;
         }
-
+        
+        // 返回搜尋值最後出現的地方之前的內容
         return static::substr($subject, 0, $pos);
     }
 
@@ -157,10 +167,12 @@ class Str
      */
     public static function camel($value)
     {
+        // 如存在轉換過的的值則直接返回
         if (isset(static::$camelCache[$value])) {
             return static::$camelCache[$value];
         }
 
+        // 把字符串分割轉換為首字母大些，然後將第一個字母轉為小寫實現駝峰
         return static::$camelCache[$value] = lcfirst(static::studly($value));
     }
 
@@ -173,6 +185,7 @@ class Str
      */
     public static function contains($haystack, $needles)
     {
+        // 將搜尋值（可多個可單個）循環匹配獲取在字符串中最後出現的位置，存在則包含
         foreach ((array) $needles as $needle) {
             if ($needle !== '' && mb_strpos($haystack, $needle) !== false) {
                 return true;
@@ -191,12 +204,14 @@ class Str
      */
     public static function containsAll($haystack, array $needles)
     {
+        // 循環匹配搜尋數組，有一個不包含則返回false
         foreach ($needles as $needle) {
             if (! static::contains($haystack, $needle)) {
                 return false;
             }
         }
 
+        // 全包含
         return true;
     }
 
@@ -209,12 +224,15 @@ class Str
      */
     public static function endsWith($haystack, $needles)
     {
+        // 循環比對搜尋值
         foreach ((array) $needles as $needle) {
+            // 有一個在最後的位置上則返回false
             if (substr($haystack, -strlen($needle)) === (string) $needle) {
                 return true;
             }
         }
 
+        // 末尾值裡不包含搜尋值
         return false;
     }
 
@@ -227,8 +245,10 @@ class Str
      */
     public static function finish($value, $cap)
     {
+        // 在設定結尾前加/
         $quoted = preg_quote($cap, '/');
 
+        // 如已經結尾已經是設定值則替換為空並從新設置結尾值
         return preg_replace('/(?:'.$quoted.')+$/u', '', $value).$cap;
     }
 
@@ -241,8 +261,10 @@ class Str
      */
     public static function is($pattern, $value)
     {
+        // 將匹配值轉為數組
         $patterns = Arr::wrap($pattern);
 
+        // 為空返回false
         if (empty($patterns)) {
             return false;
         }
@@ -251,17 +273,21 @@ class Str
             // If the given value is an exact match we can of course return true right
             // from the beginning. Otherwise, we will translate asterisks and do an
             // actual pattern match against the two strings to see if they match.
+            // 當搜尋值等於字符串時則返回
             if ($pattern == $value) {
                 return true;
             }
 
+            // 匹配字符串前加#
             $pattern = preg_quote($pattern, '#');
 
             // Asterisks are translated into zero-or-more regular expression wildcards
             // to make it convenient to check if the strings starts with the given
             // pattern such as "library/*", making any string check convenient.
+            // *能做通配符的原因
             $pattern = str_replace('\*', '.*', $pattern);
 
+            // 當結構匹配時返回true
             if (preg_match('#^'.$pattern.'\z#u', $value) === 1) {
                 return true;
             }
@@ -289,10 +315,12 @@ class Str
      */
     public static function isUuid($value)
     {
+        // 不是字符串直接返回false
         if (! is_string($value)) {
             return false;
         }
 
+        // 判斷字符串是否符合uuid格式
         return preg_match('/^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/iD', $value) > 0;
     }
 
@@ -304,6 +332,7 @@ class Str
      */
     public static function kebab($value)
     {
+        // 將字符串轉為「短横式」字符串，如foo-bar
         return static::snake($value, '-');
     }
 
@@ -333,10 +362,12 @@ class Str
      */
     public static function limit($value, $limit = 100, $end = '...')
     {
+        // 檢查字符串的長度如果小於等於階段長度則返回字符串本身
         if (mb_strwidth($value, 'UTF-8') <= $limit) {
             return $value;
         }
 
+        // 去除右邊空格，截取設定長度的字符串拼接設定末尾
         return rtrim(mb_strimwidth($value, 0, $limit, '', 'UTF-8')).$end;
     }
 
@@ -391,6 +422,7 @@ class Str
      */
     public static function plural($value, $count = 2)
     {
+        // 將單詞轉為複數形式
         return Pluralizer::plural($value, $count);
     }
 
@@ -420,6 +452,7 @@ class Str
     {
         $string = '';
 
+        // 生成指定長度的隨機字符串
         while (($len = strlen($string)) < $length) {
             $size = $length - $len;
 
@@ -441,10 +474,13 @@ class Str
      */
     public static function replaceArray($search, array $replace, $subject)
     {
+        // 按替換符分割字符串
         $segments = explode($search, $subject);
 
+        // 取出分割後的第一個元素
         $result = array_shift($segments);
 
+        // 循環拼接替換，將替換符替換為替換內容，如沒有內容可以替換則保留替換符
         foreach ($segments as $segment) {
             $result .= (array_shift($replace) ?? $search).$segment;
         }
@@ -581,13 +617,17 @@ class Str
     {
         $key = $value;
 
+        // 存在轉換格式直接返回
         if (isset(static::$snakeCache[$key][$delimiter])) {
             return static::$snakeCache[$key][$delimiter];
         }
 
+        // 判斷字符是否都為小寫
         if (! ctype_lower($value)) {
+            // 將字符串中的所有單詞首字母轉為大寫，並將字符串中的空格替換為空
             $value = preg_replace('/\s+/u', '', ucwords($value));
 
+            // 從首字母為大寫且前面有內容的部分替換為x_,並轉為小寫
             $value = static::lower(preg_replace('/(.)(?=[A-Z])/u', '$1'.$delimiter, $value));
         }
 
@@ -626,8 +666,10 @@ class Str
             return static::$studlyCache[$key];
         }
 
+        // 將字符串的-_替換為空格，並將裡面的每個單詞的首字母轉為大些
         $value = ucwords(str_replace(['-', '_'], ' ', $value));
 
+        // 最後將空格去除返回該值
         return static::$studlyCache[$key] = str_replace(' ', '', $value);
     }
 
@@ -670,6 +712,7 @@ class Str
      */
     public static function ucfirst($string)
     {
+        // 將手字母轉為大些拼接後面內容返回
         return static::upper(static::substr($string, 0, 1)).static::substr($string, 1);
     }
 
@@ -692,21 +735,25 @@ class Str
      */
     public static function orderedUuid()
     {
+        // 已生成則直接返回
         if (static::$uuidFactory) {
             return call_user_func(static::$uuidFactory);
         }
 
         $factory = new UuidFactory();
 
+        // 設置隨機生成器
         $factory->setRandomGenerator(new CombGenerator(
             $factory->getRandomGenerator(),
             $factory->getNumberConverter()
         ));
 
+        // 生成uuid
         $factory->setCodec(new TimestampFirstCombCodec(
             $factory->getUuidBuilder()
         ));
 
+        // 返回uuid
         return $factory->uuid4();
     }
 

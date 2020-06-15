@@ -259,14 +259,17 @@ if (! function_exists('e')) {
      */
     function e($value, $doubleEncode = true)
     {
+        // 解决类正在延迟的可显示值
         if ($value instanceof DeferringDisplayableValue) {
             $value = $value->resolveDisplayableValue();
         }
 
+        // 以HTML字符串形式获取内容
         if ($value instanceof Htmlable) {
             return $value->toHtml();
         }
 
+        // 将特殊字符转换为 HTML 实体
         return htmlspecialchars($value, ENT_QUOTES, 'UTF-8', $doubleEncode);
     }
 }
@@ -382,8 +385,10 @@ if (! function_exists('preg_replace_array')) {
      */
     function preg_replace_array($pattern, array $replacements, $subject)
     {
+        // 正則回調替換符合要求的內容，使用替換數組進行逐個替換
         return preg_replace_callback($pattern, function () use (&$replacements) {
             foreach ($replacements as $key => $value) {
+                // 逐個替換，替換過的不再替換
                 return array_shift($replacements);
             }
         }, $subject);
