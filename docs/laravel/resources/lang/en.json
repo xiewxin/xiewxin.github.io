@@ -1,1 +1,5 @@
-{"Please enter your 4-digit verification number:": "men fadlak adkhel raqam al tareef"}
+{
+"Please enter your 4-digit verification number:": "men fadlak adkhel raqam al tareef",
+"messages.welcome": "test",
+"messages.notifications": "aaa bbb ccc ddd"
+}

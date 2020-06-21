@@ -109,6 +109,7 @@ if (! function_exists('collect')) {
      */
     function collect($value = null)
     {
+        // 創建集合
         return new Collection($value);
     }
 }
@@ -132,6 +133,7 @@ if (! function_exists('data_fill')) {
 if (! function_exists('data_get')) {
     /**
      * Get an item from an array or object using "dot" notation.
+     * 使用“點”表示法從數組或對像中獲取項目
      *
      * @param  mixed  $target
      * @param  string|array|int|null  $key

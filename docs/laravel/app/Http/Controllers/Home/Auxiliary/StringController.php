@@ -115,7 +115,64 @@ class StringController extends Controller
         $string = 'The event will take place between ? and ?';
         // The event will take place between 8:30 and 9:00
         $res['str_replaceArray'] = Str::replaceArray('?', ['8:30', '9:00'], $string);
+        
+        // 23. Str::replaceFirst 函数替换字符串中给定值的第一个匹配项
+        // a quick brown fox jumps over the lazy dog
+        $res['str_replaceFirst'] = Str::replaceFirst('the', 'a', 'the quick brown fox jumps over the lazy dog');
+        
+        // 24. Str::replaceLast 函数替换字符串中最后一次出现的给定值
+        // the quick brown fox jumps over a lazy dog
+        $res['str_replaceLast'] = Str::replaceLast('the', 'a', 'the quick brown fox jumps over the lazy dog');
 
+        // 25. Str::singular 函数将字符串转换为单数形式。该函数目前仅支持英文
+        // car
+        $res['str_singular'][] = Str::singular('cars');
+        // child
+        $res['str_singular'][] = Str::singular('children');
+        
+        // 26. Str::slug 函数将给定的字符串生成一个 URL 友好的 「slug」
+        // 可用於定義函數名
+        // laravel-5-framework
+        $res['str_slug'] = Str::slug('Laravel 5 Framework', '-');
+        
+        // 27. Str::snake 函数将给定的字符串转换为 snake_case「蛇式」
+        // foo_bar
+        $res['str_snake'] = Str::snake('fooBar');
+        
+        // 28. Str::start 函数将给定值添加到给定字符串的开始位置（如果字符串尚未以给定值开始）
+        // /this/string
+        $res['str_start'][] = Str::start('this/string', '/');
+        // /this/string
+        $res['str_start'][] = Str::start('/this/string', '/');
+       
+        // 29. Str::startsWith 函数判断给定的字符串的开头是否是指定值
+        // true
+        $res['str_startsWith'] = Str::startsWith('This is my name', 'This');
+        
+        // 30. Str::studly 函数将给定的字符串转换为 「变种驼峰命名」
+        // FooBar
+        $res['str_studly'] = Str::studly('foo_bar');
+        
+        // 31. Str::title 函数将给定的字符串转换为「首字母大写」
+        // A Nice Title Uses The Correct Case
+        $res['str_title'] = Str::title('a nice title uses the correct case');
+        
+        // 32. Str::uuid 方法生成一个 UUID（版本 4）
+        // 75c0a1f7-fb55-4a3c-af41-28f226e74f7e
+        $res['str_uuid'] = (string) Str::uuid();
+        
+        // 33. Str::words 函数限制字符串中的单词数
+        // Perfectly balanced, as >>>
+        $res['str_words'] = Str::words('Perfectly balanced, as all things should be.', 3, ' >>>');
+        
+        // 34. trans 函数使用你的 本地文件 转换给定的翻译密钥
+        // 翻譯配置文件/xiewxin.github.io/docs/laravel/resources/lang/en.json
+        // test
+        $res['trans'] = trans('messages.welcome');
+        
+        // 35. trans_choice 函数根据词形变化来翻译给定的翻译键
+        $res['trans_choice'] = trans_choice('messages.notifications', 3);
+        
         dump($res);
     }
 }

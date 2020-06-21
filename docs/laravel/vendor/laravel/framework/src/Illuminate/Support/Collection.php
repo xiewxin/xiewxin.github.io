@@ -52,6 +52,7 @@ class Collection implements ArrayAccess, Enumerable
 
     /**
      * Get all of the items in the collection.
+     * 獲取集合中的所有項目
      *
      * @return array
      */
@@ -72,20 +73,25 @@ class Collection implements ArrayAccess, Enumerable
 
     /**
      * Get the average value of a given key.
+     * 返回指定键的 平均值
      *
      * @param  callable|string|null  $callback
      * @return mixed
      */
     public function avg($callback = null)
     {
+        // 獲取值檢索回調或鍵值
         $callback = $this->valueRetriever($callback);
 
         $items = $this->map(function ($value) use ($callback) {
+            // 重新組裝數組
             return $callback($value);
         })->filter(function ($value) {
+            // 去除空值
             return ! is_null($value);
         });
 
+        // 如存在值則返回所有值得平均數
         if ($count = $items->count()) {
             return $items->sum() / $count;
         }
@@ -152,6 +158,7 @@ class Collection implements ArrayAccess, Enumerable
 
     /**
      * Collapse the collection of items into a single array.
+     * 方法把一个多数组集合坍缩为单个扁平的集合
      *
      * @return static
      */
@@ -170,27 +177,34 @@ class Collection implements ArrayAccess, Enumerable
      */
     public function contains($key, $operator = null, $value = null)
     {
+        // 如只設置key
         if (func_num_args() === 1) {
+            // 非字符串為可處理回調
             if ($this->useAsCallable($key)) {
                 $placeholder = new stdClass;
 
+                // 檢查是否包含索引值返回bool
                 return $this->first($key, $placeholder) !== $placeholder;
             }
 
+            // 如為數組，返回是否在數組中
             return in_array($key, $this->items);
         }
 
+        // 檢查數組中的設定鍵值對是否存在檢索值
         return $this->contains($this->operatorForWhere(...func_get_args()));
     }
 
     /**
      * Cross join with the given lists, returning all possible permutations.
+     * 交叉连接指定数组或集合的值，返回所有可能排列的笛卡尔积
      *
      * @param  mixed  ...$lists
      * @return static
      */
     public function crossJoin(...$lists)
     {
+        // 使用Arr::crossJoin返回當前集合和設定集合之間的笛卡爾積
         return new static(Arr::crossJoin(
             $this->items, ...array_map([$this, 'getArrayableItems'], $lists)
         ));
@@ -198,12 +212,14 @@ class Collection implements ArrayAccess, Enumerable
 
     /**
      * Get the items in the collection that are not present in the given items.
+     * 獲取集合差
      *
      * @param  mixed  $items
      * @return static
      */
     public function diff($items)
     {
+        // 使用array_diff得到集合差
         return new static(array_diff($this->items, $this->getArrayableItems($items)));
     }
 
@@ -221,12 +237,14 @@ class Collection implements ArrayAccess, Enumerable
 
     /**
      * Get the items in the collection whose keys and values are not present in the given items.
+     * 回原集合不存在于指定集合的键 / 值对 
      *
      * @param  mixed  $items
      * @return static
      */
     public function diffAssoc($items)
     {
+        // 使用array_diff_assoc,回原集合不存在于指定集合的键 / 值对
         return new static(array_diff_assoc($this->items, $this->getArrayableItems($items)));
     }
 
@@ -244,12 +262,14 @@ class Collection implements ArrayAccess, Enumerable
 
     /**
      * Get the items in the collection whose keys are not present in the given items.
+     * 返回原集合中存在而指定集合中不存在键所对应的键 / 值对
      *
      * @param  mixed  $items
      * @return static
      */
     public function diffKeys($items)
     {
+        // 使用array_diff_key，整理原集合中存在而指定集合中不存在键所对应的键 / 值对
         return new static(array_diff_key($this->items, $this->getArrayableItems($items)));
     }
 
@@ -357,6 +377,7 @@ class Collection implements ArrayAccess, Enumerable
 
     /**
      * Get the first item from the collection passing the given truth test.
+     * 從集合中獲得通過給定真值測試的第一項
      *
      * @param  callable|null  $callback
      * @param  mixed  $default
@@ -716,12 +737,13 @@ class Collection implements ArrayAccess, Enumerable
 
     /**
      * Create a collection by using this collection for keys and another for its values.
+     * 通過使用此集合作為鍵並使用另一個作為其值來創建一個集合
      *
      * @param  mixed  $values
      * @return static
      */
     public function combine($values)
-    {
+    { 
         return new static(array_combine($this->all(), $this->getArrayableItems($values)));
     }
 
@@ -828,12 +850,15 @@ class Collection implements ArrayAccess, Enumerable
      */
     public function concat($source)
     {
+        // 當前集合內容
         $result = new static($this);
 
+        // 追加內容
         foreach ($source as $item) {
             $result->push($item);
         }
 
+        // 返回
         return $result;
     }
 
@@ -1051,22 +1076,26 @@ class Collection implements ArrayAccess, Enumerable
 
     /**
      * Chunk the collection into chunks of the given size.
+     * 將集合分成給定大小的塊
      *
      * @param  int  $size
      * @return static
      */
     public function chunk($size)
     {
+        // 如未設置塊大小則返回集合本身
         if ($size <= 0) {
             return new static;
         }
 
         $chunks = [];
 
+        // 將集合分成指定大小的塊
         foreach (array_chunk($this->items, $size, true) as $chunk) {
             $chunks[] = new static($chunk);
         }
 
+        // 返回新的集合
         return new static($chunks);
     }
 
@@ -1298,6 +1327,7 @@ class Collection implements ArrayAccess, Enumerable
 
     /**
      * Count the number of items in the collection.
+     * 返回这个集合内集合项的总数量
      *
      * @return int
      */

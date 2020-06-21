@@ -338,6 +338,7 @@ class Str
 
     /**
      * Return the length of the given string.
+     * 返回給定字符串的長度
      *
      * @param  string  $value
      * @param  string|null  $encoding
@@ -373,6 +374,7 @@ class Str
 
     /**
      * Convert the given string to lower-case.
+     * 將給定的字符串轉換為小寫
      *
      * @param  string  $value
      * @return string
@@ -384,6 +386,7 @@ class Str
 
     /**
      * Limit the number of words in a string.
+     * 限製字符串中的單詞數
      *
      * @param  string  $value
      * @param  int  $words
@@ -392,12 +395,15 @@ class Str
      */
     public static function words($value, $words = 100, $end = '...')
     {
+        // 獲取指定單詞數
         preg_match('/^\s*+(?:\S++\s*+){1,'.$words.'}/u', $value, $matches);
 
+        // 無單詞或只有一個單詞則直接返回
         if (! isset($matches[0]) || static::length($value) === static::length($matches[0])) {
             return $value;
         }
 
+        // 返回指定單詞數拼接末尾符號
         return rtrim($matches[0]).$end;
     }
 
@@ -498,16 +504,20 @@ class Str
      */
     public static function replaceFirst($search, $replace, $subject)
     {
+        // 當搜尋值為空時直接返回原字符串
         if ($search == '') {
             return $subject;
         }
 
+        // 獲取搜尋值在字符串中的位置
         $position = strpos($subject, $search);
 
+        // 如存在則將字符串中的首次與搜尋值匹配傷的內容替換成替換值
         if ($position !== false) {
             return substr_replace($subject, $replace, $position, strlen($search));
         }
 
+        // 不存在返回字符串本身
         return $subject;
     }
 
@@ -521,17 +531,21 @@ class Str
      */
     public static function replaceLast($search, $replace, $subject)
     {
+        // 獲取搜尋值在字符串中最後出現的位置
         $position = strrpos($subject, $search);
 
+        // 如存在則將最後出現的搜尋值替換為設置值
         if ($position !== false) {
             return substr_replace($subject, $replace, $position, strlen($search));
         }
 
+        // 無則返回字符串本身
         return $subject;
     }
 
     /**
      * Begin a string with a single instance of a given value.
+     * 将给定值添加到给定字符串的开始位置（如果字符串尚未以给定值开始）
      *
      * @param  string  $value
      * @param  string  $prefix
@@ -539,8 +553,10 @@ class Str
      */
     public static function start($value, $prefix)
     {
+        // 將給定值轉為正則形式
         $quoted = preg_quote($prefix, '/');
 
+        // 將字符串設置為給定值開頭的字符串
         return $prefix.preg_replace('/^(?:'.$quoted.')+/u', '', $value);
     }
 
@@ -557,12 +573,14 @@ class Str
 
     /**
      * Convert the given string to title case.
+     * 將給定的字符串轉換為標題大小寫
      *
      * @param  string  $value
      * @return string
      */
     public static function title($value)
     {
+        // 將給定的字符串轉換為首字母大寫
         return mb_convert_case($value, MB_CASE_TITLE, 'UTF-8');
     }
 
@@ -574,11 +592,13 @@ class Str
      */
     public static function singular($value)
     {
+        // 獲取英語單詞的單數形式
         return Pluralizer::singular($value);
     }
 
     /**
      * Generate a URL friendly "slug" from a given string.
+     * 從給定的字符串生成URL友好的“ slug”
      *
      * @param  string  $title
      * @param  string  $separator
@@ -587,20 +607,25 @@ class Str
      */
     public static function slug($title, $separator = '-', $language = 'en')
     {
+        // 默認將UTF-8字符串轉為ASCII
         $title = $language ? static::ascii($title, $language) : $title;
 
         // Convert all dashes/underscores into separator
+        // 將所有破折號/下劃線轉換為分隔符
         $flip = $separator === '-' ? '_' : '-';
 
         $title = preg_replace('!['.preg_quote($flip).']+!u', $separator, $title);
 
         // Replace @ with the word 'at'
+        // @替換為‘分隔符at’的格式
         $title = str_replace('@', $separator.'at'.$separator, $title);
 
         // Remove all characters that are not the separator, letters, numbers, or whitespace.
+        // 將字符串轉為小寫，並刪除所有不是分隔符，字母，數字或空格的字符。
         $title = preg_replace('![^'.preg_quote($separator).'\pL\pN\s]+!u', '', static::lower($title));
 
         // Replace all separator characters and whitespace by a single separator
+        // 用分隔符替換所有分隔符和空格
         $title = preg_replace('!['.preg_quote($separator).'\s]+!u', $separator, $title);
 
         return trim($title, $separator);
@@ -643,12 +668,15 @@ class Str
      */
     public static function startsWith($haystack, $needles)
     {
+        // 將給定值轉為數組，所以可設置多個
         foreach ((array) $needles as $needle) {
+            // 判斷給定值是否在字符串開頭部分，如果是則返回true
             if ((string) $needle !== '' && strncmp($haystack, $needle, strlen($needle)) === 0) {
                 return true;
             }
         }
 
+        // 否則false
         return false;
     }
 
@@ -718,6 +746,7 @@ class Str
 
     /**
      * Generate a UUID (version 4).
+     * Str::uuid 方法生成一个 UUID（版本 4
      *
      * @return \Ramsey\Uuid\UuidInterface
      */

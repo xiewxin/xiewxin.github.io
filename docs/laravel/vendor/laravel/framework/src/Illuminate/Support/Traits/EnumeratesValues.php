@@ -144,14 +144,17 @@ trait EnumeratesValues
     {
         if (func_num_args() === 2) {
             return $this->contains(function ($item) use ($key, $value) {
+                // 檢查檢索鍵值是否全等於設置值
                 return data_get($item, $key) === $value;
             });
         }
 
+        // 檢查是否包含和是否為空
         if ($this->useAsCallable($key)) {
             return ! is_null($this->first($key));
         }
 
+        // 循環檢索每個鍵值是否全等
         foreach ($this as $item) {
             if ($item === $key) {
                 return true;
@@ -163,24 +166,29 @@ trait EnumeratesValues
 
     /**
      * Dump the items and end the script.
+     * 中斷並打印結合元素
      *
      * @param  mixed  ...$args
      * @return void
      */
     public function dd(...$args)
     {
+        // 使用dump打印集合元素
         call_user_func_array([$this, 'dump'], $args);
 
+        // 中斷
         die(1);
     }
 
     /**
      * Dump the items.
+     * 打印集合项
      *
      * @return $this
      */
     public function dump()
     {
+        // 設置打印集合
         (new static(func_get_args()))
             ->push($this)
             ->each(function ($item) {
@@ -808,18 +816,21 @@ trait EnumeratesValues
 
     /**
      * Count the number of items in the collection using a given truth test.
+     * 返回每個值出現的次數
      *
      * @param  callable|null  $callback
      * @return static
      */
     public function countBy($callback = null)
     {
+        // 
         if (is_null($callback)) {
             $callback = function ($value) {
                 return $value;
             };
         }
 
+        // 返回每個值出現的次數
         return new static($this->groupBy($callback)->map(function ($value) {
             return $value->count();
         }));
@@ -865,23 +876,35 @@ trait EnumeratesValues
 
     /**
      * Results array of items from Collection or Arrayable.
+     * 來自Collection或Arrayable的結果數組
      *
      * @param  mixed  $items
      * @return array
      */
     protected function getArrayableItems($items)
     {
+        // 數組直接返回
         if (is_array($items)) {
             return $items;
-        } elseif ($items instanceof Enumerable) {
+        } 
+        // 可枚舉
+        elseif ($items instanceof Enumerable) {
             return $items->all();
-        } elseif ($items instanceof Arrayable) {
+        } 
+        // 數組對象
+        elseif ($items instanceof Arrayable) {
             return $items->toArray();
-        } elseif ($items instanceof Jsonable) {
+        } 
+        // json
+        elseif ($items instanceof Jsonable) {
             return json_decode($items->toJson(), true);
-        } elseif ($items instanceof JsonSerializable) {
+        } 
+        // 序列化json
+        elseif ($items instanceof JsonSerializable) {
             return (array) $items->jsonSerialize();
-        } elseif ($items instanceof Traversable) {
+        } 
+        // 迭代器
+        elseif ($items instanceof Traversable) {
             return iterator_to_array($items);
         }
 
@@ -890,6 +913,7 @@ trait EnumeratesValues
 
     /**
      * Get an operator checker callback.
+     * 獲取操作檢查器回調
      *
      * @param  string  $key
      * @param  string|null  $operator
@@ -939,6 +963,7 @@ trait EnumeratesValues
 
     /**
      * Determine if the given value is callable, but not a string.
+     * 確定給定值是否可調用和不是字符串
      *
      * @param  mixed  $value
      * @return bool
@@ -950,16 +975,19 @@ trait EnumeratesValues
 
     /**
      * Get a value retrieving callback.
+     * 獲取值檢索回調
      *
      * @param  callable|string|null  $value
      * @return callable
      */
     protected function valueRetriever($value)
     {
+        // 確定不為字符串且為空用回調則直接返回
         if ($this->useAsCallable($value)) {
             return $value;
         }
 
+        // 如不是回調則找到指定鍵值內容
         return function ($item) use ($value) {
             return data_get($item, $value);
         };

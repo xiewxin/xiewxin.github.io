@@ -857,10 +857,12 @@ if (! function_exists('trans')) {
      */
     function trans($key = null, $replace = [], $locale = null)
     {
+        // 未設置翻譯值則返回翻譯處理對象
         if (is_null($key)) {
             return app('translator');
         }
 
+        // 獲取翻譯值
         return app('translator')->get($key, $replace, $locale);
     }
 }
@@ -868,6 +870,7 @@ if (! function_exists('trans')) {
 if (! function_exists('trans_choice')) {
     /**
      * Translates the given message based on a count.
+     * 根據計數翻譯給定的消息
      *
      * @param  string  $key
      * @param  \Countable|int|array  $number
