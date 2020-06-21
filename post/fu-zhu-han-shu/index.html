@@ -7,7 +7,7 @@
 <meta name="description" content="闲庭若步">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="http://xiewxin.github.io//favicon.ico?v=1592155187239">
+<link rel="shortcut icon" href="http://xiewxin.github.io//favicon.ico?v=1592740400484">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
@@ -931,6 +931,80 @@ $singular = Str::singular('children');
 
 // child
 </code></pre>
+<h4 id="strslug-collection-method"><code>Str::slug()</code> {#collection-method}</h4>
+<p><code>Str::slug</code> 函数将给定的字符串生成一个 URL 友好的 「slug」 ：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$slug = Str::slug('Laravel 5 Framework', '-');
+
+// laravel-5-framework
+</code></pre>
+<h4 id="strsnake-collection-method"><code>Str::snake()</code> {#collection-method}</h4>
+<p><code>Str::snake</code> 函数将给定的字符串转换为 <code>snake_case</code>「蛇式」：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$converted = Str::snake('fooBar');
+
+// foo_bar
+</code></pre>
+<h4 id="strstart-collection-method"><code>Str::start()</code> {#collection-method}</h4>
+<p><code>Str::start</code> 函数将给定值添加到给定字符串的开始位置（如果字符串尚未以给定值开始）：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$adjusted = Str::start('this/string', '/');
+
+// /this/string
+
+$adjusted = Str::start('/this/string', '/');
+
+// /this/string
+</code></pre>
+<h4 id="strstartswith-collection-method"><code>Str::startsWith()</code> {#collection-method}</h4>
+<p><code>Str::startsWith</code> 函数判断给定的字符串的开头是否是指定值：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$result = Str::startsWith('This is my name', 'This');
+
+// true
+</code></pre>
+<h4 id="strstudly-collection-method"><code>Str::studly()</code> {#collection-method}</h4>
+<p><code>Str::studly</code> 函数将给定的字符串转换为 「变种驼峰命名」：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$converted = Str::studly('foo_bar');
+
+// FooBar
+</code></pre>
+<h4 id="strtitle-collection-method"><code>Str::title()</code> {#collection-method}</h4>
+<p><code>Str::title</code> 函数将给定的字符串转换为「首字母大写」：</p>
+<pre><code>use Illuminate\Support\Str;
+
+$converted = Str::title('a nice title uses the correct case');
+
+// A Nice Title Uses The Correct Case
+</code></pre>
+<h4 id="struuid-collection-method"><code>Str::uuid()</code> {#collection-method}</h4>
+<p><code>Str::uuid</code> 方法生成一个 UUID（版本 4）：</p>
+<pre><code>use Illuminate\Support\Str;
+
+return (string) Str::uuid();
+</code></pre>
+<h4 id="strwords-collection-method"><code>Str::words()</code> {#collection-method}</h4>
+<p><code>Str::words</code> 函数限制字符串中的单词数：</p>
+<pre><code>use Illuminate\Support\Str;
+
+return Str::words('Perfectly balanced, as all things should be.', 3, ' &gt;&gt;&gt;');
+
+// Perfectly balanced, as &gt;&gt;&gt;
+</code></pre>
+<h4 id="trans-collection-method"><code>trans()</code> {#collection-method}</h4>
+<p><code>trans</code> 函数使用你的 本地文件（如：/xiewxin.github.io/docs/laravel/resources/lang/en.json） 转换给定的翻译密钥</p>
+<pre><code>echo trans('messages.welcome');
+</code></pre>
+<p>如果指定的翻译键不存在，则 <code>trans</code> 方法会简单地返回给定的键。所以，就上面的例子而言，如果翻译键不存在， <code>trans</code> 方法会返回 <code>messages.welcome</code></p>
+<h4 id="trans_choice-collection-method"><code>trans_choice()</code> {#collection-method}</h4>
+<p><code>trans_choice</code> 函数根据词形变化来翻译给定的翻译键：</p>
+<p>如果指定的翻译键不存在， <code>trans_choice</code> 方法会简单地返回给定的键。所以，按照上面的例子，如果翻译键不存在，<code>trans_choice</code> 方法会返回 <code>messages.notifications</code>。</p>
 
             </div>
           </article>
@@ -943,7 +1017,7 @@ $singular = Str::singular('children');
 
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
-    <img src="http://xiewxin.github.io//images/avatar.png?v=1592155187239" class="no-responsive avatar">
+    <img src="http://xiewxin.github.io//images/avatar.png?v=1592740400484" class="no-responsive avatar">
     <div class="text-muted">闲庭若步</div>
     <div class="social-container">
       
