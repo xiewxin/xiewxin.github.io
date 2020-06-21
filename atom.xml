@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://xiewxin.github.io/</id>
     <title>xiewixn blog</title>
-    <updated>2020-06-21T11:53:44.734Z</updated>
+    <updated>2020-06-21T15:18:26.139Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="http://xiewxin.github.io/"/>
     <link rel="self" href="http://xiewxin.github.io/atom.xml"/>
@@ -10,6 +10,430 @@
     <logo>http://xiewxin.github.io/images/avatar.png</logo>
     <icon>http://xiewxin.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, xiewixn blog</rights>
+    <entry>
+        <title type="html"><![CDATA[集合]]></title>
+        <id>http://xiewxin.github.io/post/ji-he/</id>
+        <link href="http://xiewxin.github.io/post/ji-he/">
+        </link>
+        <updated>2020-06-21T15:17:52.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="集合">集合</h1>
+<h3 id="扩展集合">扩展集合</h3>
+<p>集合都是「可宏扩展」(macroable) 的，它允许你在执行时将其它方法添加到 Collection 类。例如，通过下面的代码在 <code>Collection</code> 类中添加一个 <code>toUpper</code> 方法：</p>
+<pre><code>use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+
+Collection::macro('toUpper', function () {
+    return $this-&gt;map(function ($value) {
+        return Str::upper($value);
+    });
+});
+
+$collection = collect(['first', 'second']);
+
+$upper = $collection-&gt;toUpper();
+
+// ['FIRST', 'SECOND']
+</code></pre>
+<p>通常，你应该在 服务提供者 内声明集合宏。</p>
+<h2 id="可用方法">可用方法</h2>
+<p>我们将讨论每个 <code>Collection</code> 类可用的方法。记住，所有这些方法都可以链式调用以流畅地操作底层数组。此外，几乎所有方法都返回一个新的 <code>Collection</code> 实例，允许你在需要时保存集合的原始副本：</p>
+<p>all<br>
+average<br>
+avg<br>
+chunk<br>
+collapse<br>
+collect<br>
+combine<br>
+concat<br>
+contains<br>
+containsStrict<br>
+count<br>
+countBy<br>
+crossJoin<br>
+dd<br>
+diff<br>
+diffAssoc<br>
+diffKeys<br>
+dump<br>
+duplicates<br>
+duplicatesStrict<br>
+each<br>
+eachSpread<br>
+every<br>
+except<br>
+filter<br>
+first<br>
+firstWhere<br>
+flatMap<br>
+flatten<br>
+flip<br>
+forget<br>
+forPage<br>
+get<br>
+groupBy<br>
+has<br>
+implode<br>
+intersect<br>
+intersectByKeys<br>
+isEmpty<br>
+isNotEmpty<br>
+join<br>
+keyBy<br>
+keys<br>
+last<br>
+macro<br>
+make<br>
+map<br>
+mapInto<br>
+mapSpread<br>
+mapToGroups<br>
+mapWithKeys<br>
+max<br>
+median<br>
+merge<br>
+mergeRecursive<br>
+min<br>
+mode<br>
+nth<br>
+only<br>
+pad<br>
+partition<br>
+pipe<br>
+pluck<br>
+pop<br>
+prepend<br>
+pull<br>
+push<br>
+put<br>
+random<br>
+reduce<br>
+reject<br>
+replace<br>
+replaceRecursive<br>
+reverse<br>
+search<br>
+shift<br>
+shuffle<br>
+skip<br>
+slice<br>
+some<br>
+sort<br>
+sortBy<br>
+sortByDesc<br>
+sortDesc<br>
+sortKeys<br>
+sortKeysDesc<br>
+splice<br>
+split<br>
+sum<br>
+take<br>
+tap<br>
+times<br>
+toArray<br>
+toJson<br>
+transform<br>
+union<br>
+unique<br>
+uniqueStrict<br>
+unless<br>
+unlessEmpty<br>
+unlessNotEmpty<br>
+unwrap<br>
+values<br>
+when<br>
+whenEmpty<br>
+whenNotEmpty<br>
+where<br>
+whereStrict<br>
+whereBetween<br>
+whereIn<br>
+whereInStrict<br>
+whereInstanceOf<br>
+whereNotBetween<br>
+whereNotIn<br>
+whereNotInStrict<br>
+whereNotNull<br>
+whereNull<br>
+wrap<br>
+zip</p>
+<h2 id="方法列表">方法列表</h2>
+<h4 id="all"><code>all()</code></h4>
+<p><code>all</code> 方法返回代表集合的底层数组：</p>
+<pre><code>collect([1, 2, 3])-&gt;all();
+
+// [1, 2, 3]
+</code></pre>
+<h4 id="average"><code>average()</code></h4>
+<p><code>avg</code> 方法的别名。</p>
+<h4 id="avg"><code>avg()</code></h4>
+<p><code>avg</code> 方法返回指定键的 平均值：</p>
+<pre><code>$average = collect([['foo' =&gt; 10], ['foo' =&gt; 10], ['foo' =&gt; 20], ['foo' =&gt; 40]])-&gt;avg('foo');
+
+// 20
+
+$average = collect([1, 1, 2, 4])-&gt;avg();
+
+// 2
+</code></pre>
+<h4 id="chunk"><code>chunk()</code></h4>
+<p><code>chunk</code> 方法把集合分割成多个指定大小的较小集合：</p>
+<pre><code>$collection = collect([1, 2, 3, 4, 5, 6, 7]);
+
+$chunks = $collection-&gt;chunk(4);
+
+$chunks-&gt;toArray();
+
+// [[1, 2, 3, 4], [5, 6, 7]]
+</code></pre>
+<p>当使用如 Bootstrap 那样的栅格系统时，该方法在 视图 中相当有用。想象一下你有个想在栅格显示的Eloquent 模型：</p>
+<pre><code>@foreach ($products-&gt;chunk(3) as $chunk)
+    &lt;div class=&quot;row&quot;&gt;
+        @foreach ($chunk as $product)
+            &lt;div class=&quot;col-xs-4&quot;&gt;{{ $product-&gt;name }}&lt;/div&gt;
+        @endforeach
+    &lt;/div&gt;
+@endforeach
+</code></pre>
+<h4 id="collapse"><code>collapse()</code></h4>
+<p><code>collapse</code> 方法把一个多数组集合坍缩为单个扁平的集合：</p>
+<pre><code>$collection = collect([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
+
+$collapsed = $collection-&gt;collapse();
+
+$collapsed-&gt;all();
+
+// [1, 2, 3, 4, 5, 6, 7, 8, 9]
+</code></pre>
+<h4 id="combine"><code>combine()</code></h4>
+<p><code>combine</code> 方法将一个集合的值作为键，与另一个数组或集合的值进行结合：</p>
+<pre><code>$collection = collect(['name', 'age']);
+
+$combined = $collection-&gt;combine(['George', 29]);
+
+$combined-&gt;all();
+
+// ['name' =&gt; 'George', 'age' =&gt; 29]
+</code></pre>
+<h4 id="collect"><code>collect()</code></h4>
+<p><code>collect</code> 方法返回一个包含当前集合所含元素的新 <code>Collection</code> 实例：</p>
+<pre><code>$collectionA = collect([1, 2, 3]);
+
+$collectionB = $collectionA-&gt;collect();
+
+$collectionB-&gt;all();
+
+// [1, 2, 3]
+</code></pre>
+<p><code>collect</code> 方法从根本上对将 懒集合 转换为标准 <code>Collection</code> 实例有用:</p>
+<pre><code>$lazyCollection = LazyCollection::make(function () {
+    yield 1;
+    yield 2;
+    yield 3;
+});
+
+$collection = $lazyCollection-&gt;collect();
+
+get_class($collection);
+
+// 'Illuminate\Support\Collection'
+
+$collection-&gt;all();
+
+// [1, 2, 3]
+</code></pre>
+<h4 id="concat"><code>concat()</code></h4>
+<p><code>concat</code> 方法在集合的末端附加指定的 <code>数组</code> 或集合值：</p>
+<pre><code>$collection = collect(['John Doe']);
+
+$concatenated = $collection-&gt;concat(['Jane Doe'])-&gt;concat(['name' =&gt; 'Johnny Doe']);
+
+$concatenated-&gt;all();
+
+// ['John Doe', 'Jane Doe', 'Johnny Doe']
+</code></pre>
+<h4 id="contains"><code>contains()</code></h4>
+<p><code>contains</code> 方法检查集合有否包含指定的元素：</p>
+<pre><code>$collection = collect(['name' =&gt; 'Desk', 'price' =&gt; 100]);
+
+$collection-&gt;contains('Desk');
+
+// true
+
+$collection-&gt;contains('New York');
+
+// false
+</code></pre>
+<p>你也可以传递一个键 / 值对给 <code>contains</code> 方法，它将检查集合有否存在指定的键 / 值对：</p>
+<pre><code>$collection = collect([
+    ['product' =&gt; 'Desk', 'price' =&gt; 200],
+    ['product' =&gt; 'Chair', 'price' =&gt; 100],
+]);
+
+$collection-&gt;contains('product', 'Bookcase');
+
+// false
+</code></pre>
+<p>最后，你也可以传递一个回调函数给 <code>contains</code> 方法去执行你的真值检验：</p>
+<pre><code>$collection = collect([1, 2, 3, 4, 5]);
+
+$collection-&gt;contains(function ($value, $key) {
+    return $value &gt; 5;
+});
+
+// false
+</code></pre>
+<p><code>contains</code> 方法用 “松散” 比较检查元素值，意味着整数值的字符串会被视同等值的整数。用 <code>containsStrict</code> 方法使用 “严格” 比较过滤。</p>
+<h4 id="containsstrict"><code>containsStrict()</code></h4>
+<p>这个方法和 <code>contains</code> 方法类似；但是它却是使用了「严格」比较来比较所有的值。</p>
+<h4 id="count"><code>count()</code></h4>
+<p><code>count</code> 方法返回这个集合内集合项的总数量：</p>
+<pre><code>$collection = collect([1, 2, 3, 4]);
+
+$collection-&gt;count();
+
+// 4
+</code></pre>
+<h4 id="countby"><code>countBy()</code></h4>
+<p><code>countBy</code> 方法计算集合中每个值的出现次数。默认情况下，该方法计算每个元素的出现次数：</p>
+<pre><code>$collection = collect([1, 2, 2, 2, 3]);
+
+$counted = $collection-&gt;countBy();
+
+$counted-&gt;all();
+
+// [1 =&gt; 1, 2 =&gt; 3, 3 =&gt; 1]
+</code></pre>
+<p>但是，你也可以向 <code>countBy</code> 传递一个回调函数来计算自定义的值出现的次数:</p>
+<pre><code>$collection = collect(['alice@gmail.com', 'bob@yahoo.com', 'carlos@gmail.com']);
+
+$counted = $collection-&gt;countBy(function ($email) {
+    return substr(strrchr($email, &quot;@&quot;), 1);
+});
+
+$counted-&gt;all();
+
+// ['gmail.com' =&gt; 2, 'yahoo.com' =&gt; 1]
+</code></pre>
+<h4 id="crossjoin"><code>crossJoin()</code></h4>
+<p><code>crossJoin</code> 方法交叉连接指定数组或集合的值，返回所有可能排列的笛卡尔积:</p>
+<pre><code>$collection = collect([1, 2]);
+
+$matrix = $collection-&gt;crossJoin(['a', 'b']);
+
+$matrix-&gt;all();
+
+/*
+    [
+        [1, 'a'],
+        [1, 'b'],
+        [2, 'a'],
+        [2, 'b'],
+    ]
+*/
+
+$collection = collect([1, 2]);
+
+$matrix = $collection-&gt;crossJoin(['a', 'b'], ['I', 'II']);
+
+$matrix-&gt;all();
+
+/*
+    [
+        [1, 'a', 'I'],
+        [1, 'a', 'II'],
+        [1, 'b', 'I'],
+        [1, 'b', 'II'],
+        [2, 'a', 'I'],
+        [2, 'a', 'II'],
+        [2, 'b', 'I'],
+        [2, 'b', 'II'],
+    ]
+*/
+</code></pre>
+<h4 id="dd"><code>dd()</code></h4>
+<p><code>dd</code> 方法用于打印集合元素并中断脚本执行：</p>
+<pre><code>$collection = collect(['John Doe', 'Jane Doe']);
+
+$collection-&gt;dd();
+
+/*
+    Collection {
+        #items: array:2 [
+            0 =&gt; &quot;John Doe&quot;
+            1 =&gt; &quot;Jane Doe&quot;
+        ]
+    }
+*/
+</code></pre>
+<p>如果你不想中断执行脚本，请使用 <code>dump</code> 方法替代。</p>
+<h4 id="diff"><code>diff()</code></h4>
+<p><code>diff</code> 方法将集合与其它集合或者 PHP 数组进行值的比较。然后返回原集合中存在而指定集合中不存在的值：</p>
+<pre><code>$collection = collect([1, 2, 3, 4, 5]);
+
+$diff = $collection-&gt;diff([2, 4, 6, 8]);
+
+$diff-&gt;all();
+
+// [1, 3, 5]
+</code></pre>
+<h4 id="diffassoc"><code>diffAssoc()</code></h4>
+<p><code>diffAssoc</code> 方法与另外一个集合或基于 PHP 数组的键 / 值对（<code>keys and values</code>）进行比较。这个方法将会返回原集合不存在于指定集合的键 / 值对：</p>
+<pre><code>$collection = collect([
+    'color' =&gt; 'orange',
+    'type' =&gt; 'fruit',
+    'remain' =&gt; 6
+]);
+
+$diff = $collection-&gt;diffAssoc([
+    'color' =&gt; 'yellow',
+    'type' =&gt; 'fruit',
+    'remain' =&gt; 3,
+    'used' =&gt; 6,
+]);
+
+$diff-&gt;all();
+
+// ['color' =&gt; 'orange', 'remain' =&gt; 6]
+</code></pre>
+<h4 id="diffkeys"><code>diffKeys()</code></h4>
+<p><code>diffKeys</code> 方法和另外一个集合或 PHP 数组的键（<code>keys</code>）进行比较，然后返回原集合中存在而指定集合中不存在键所对应的键 / 值对：</p>
+<pre><code>$collection = collect([
+    'one' =&gt; 10,
+    'two' =&gt; 20,
+    'three' =&gt; 30,
+    'four' =&gt; 40,
+    'five' =&gt; 50,
+]);
+
+$diff = $collection-&gt;diffKeys([
+    'two' =&gt; 2,
+    'four' =&gt; 4,
+    'six' =&gt; 6,
+    'eight' =&gt; 8,
+]);
+
+$diff-&gt;all();
+
+// ['one' =&gt; 10, 'three' =&gt; 30, 'five' =&gt; 50]
+</code></pre>
+<h4 id="dump"><code>dump()</code></h4>
+<p><code>dump</code> 方法用于打印集合项：</p>
+<pre><code>$collection = collect(['John Doe', 'Jane Doe']);
+
+$collection-&gt;dump();
+
+/*
+    Collection {
+        #items: array:2 [
+            0 =&gt; &quot;John Doe&quot;
+            1 =&gt; &quot;Jane Doe&quot;
+        ]
+    }
+*/
+</code></pre>
+<p>如果要在打印集合后终止执行脚本，请使用 <code>dd</code> 方法代替。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[辅助函数]]></title>
         <id>http://xiewxin.github.io/post/fu-zhu-han-shu/</id>
