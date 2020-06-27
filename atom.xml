@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://xiewxin.github.io/</id>
     <title>xiewixn blog</title>
-    <updated>2020-06-21T15:18:26.139Z</updated>
+    <updated>2020-06-27T15:58:12.877Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="http://xiewxin.github.io/"/>
     <link rel="self" href="http://xiewxin.github.io/atom.xml"/>
@@ -432,6 +432,100 @@ $collection-&gt;dump();
 */
 </code></pre>
 <p>如果要在打印集合后终止执行脚本，请使用 <code>dd</code> 方法代替。</p>
+<h4 id="duplicates"><code>duplicates()</code></h4>
+<p><code>duplicates</code> 方法从集合中检索并返回重复的值：</p>
+<pre><code>$collection = collect(['a', 'b', 'a', 'c', 'b']);
+
+$collection-&gt;duplicates();
+
+// [2 =&gt; 'a', 4 =&gt; 'b']
+</code></pre>
+<p>如果集合包含数组或对象，则可以传递希望检查重复值的属性的键：</p>
+<pre><code>$employees = collect([
+    ['email' =&gt; 'abigail@example.com', 'position' =&gt; 'Developer'],
+    ['email' =&gt; 'james@example.com', 'position' =&gt; 'Designer'],
+    ['email' =&gt; 'victoria@example.com', 'position' =&gt; 'Developer'],
+])
+
+$employees-&gt;duplicates('position');
+
+// [2 =&gt; 'Developer']
+</code></pre>
+<h4 id="duplicatesstrict"><code>duplicatesStrict()</code></h4>
+<p>此方法与 <code>duplicates</code> 方法具有相同的签名；但是，所有值都以「严格」的方式进行比较。</p>
+<h4 id="each"><code>each()</code></h4>
+<p><code>each</code> 方法用于循环集合项并将其传递到回调函数中：</p>
+<pre><code>$collection-&gt;each(function ($item, $key) {
+    //
+});
+</code></pre>
+<p>如果你想中断对集合项的循环，那么就在你的回调函数中返回 <code>false</code> ：</p>
+<pre><code>$collection-&gt;each(function ($item, $key) {
+    if (/* some condition */) {
+        return false;
+    }
+});
+</code></pre>
+<h4 id="eachspread"><code>eachSpread()</code></h4>
+<p><code>eachSpread</code> 方法用于循环集合项，将每个嵌套集合项的值传递给回调函数：</p>
+<pre><code>$collection = collect([['John Doe', 35], ['Jane Doe', 33]]);
+
+$collection-&gt;eachSpread(function ($name, $age) {
+    //
+});
+</code></pre>
+<p>你可以通过在回调函数里返回 <code>false</code> 来中断循环：</p>
+<pre><code>$collection-&gt;eachSpread(function ($name, $age) {
+    return false;
+});
+</code></pre>
+<h4 id="every"><code>every()</code></h4>
+<p><code>every</code> 方法可用于验证集合中的每一个元素是否通过指定的条件测试：</p>
+<pre><code>collect([1, 2, 3, 4])-&gt;every(function ($value, $key) {
+    return $value &gt; 2;
+});
+
+// false
+</code></pre>
+<p>如果集合为空， <code>every</code> 将返回 true ：<br>
+$collection = collect([]);</p>
+<pre><code>$collection-&gt;every(function ($value, $key) {
+    return $value &gt; 2;
+});
+
+// true
+</code></pre>
+<h4 id="except"><code>except()</code></h4>
+<p><code>except</code> 方法返回集合中除了指定键之外的所有集合项：</p>
+<pre><code>$collection = collect(['product_id' =&gt; 1, 'price' =&gt; 100, 'discount' =&gt; false]);
+
+$filtered = $collection-&gt;except(['price', 'discount']);
+
+$filtered-&gt;all();
+
+// ['product_id' =&gt; 1]
+</code></pre>
+<p>与 <code>except</code> 对应的是 only 方法。</p>
+<h4 id="filter"><code>filter()</code></h4>
+<p><code>filter</code> 方法使用给定的回调函数过滤集合，只保留那些通过指定条件测试的集合项：</p>
+<pre><code>$collection = collect([1, 2, 3, 4]);
+
+$filtered = $collection-&gt;filter(function ($value, $key) {
+    return $value &gt; 2;
+});
+
+$filtered-&gt;all();
+
+// [3, 4]
+</code></pre>
+<p>如果没有提供回调函数，集合中所有返回 <code>false</code> 的元素都会被移除：</p>
+<pre><code>$collection = collect([1, 2, 3, null, false, '', 0, []]);
+
+$collection-&gt;filter()-&gt;all();
+
+// [1, 2, 3]
+</code></pre>
+<p><code>filter</code> 对应的是 reject 方法。</p>
 ]]></content>
     </entry>
     <entry>
