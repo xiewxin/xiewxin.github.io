@@ -177,6 +177,58 @@ class CollectController extends Controller
          }
          */
         $res['dump'] = $collection->dump();
+        
+        // 19. duplicates 方法从集合中检索并返回重复的值
+        $collection = collect(['a', 'b', 'a', 'c', 'b']);
+        
+        // [2 => 'a', 4 => 'b']
+        $res['duplicates'] = $collection->duplicates();
+        
+        // 20. [2 => 'a', 4 => 'b']，嚴格校驗
+        $res['duplicatesStrict'] = $collection->duplicatesStrict();
+        
+        // 21. each 方法用于循环集合项并将其传递到回调函数中
+        $res['each'][] = $collection->each(function ($item, $key) {
+            // 
+        });
+        
+        // 如果你想中断对集合项的循环，那么就在你的回调函数中返回 false ：
+        $res['each'][] = $collection->each(function ($item, $key) {
+            if ($item == 'b') {
+                return false;
+            }
+        });
+        
+        // 22. eachSpread 方法用于循环集合项，将每个嵌套集合项的值传递给回调函数
+        $collection = collect([['John Doe', 35], ['Jane Doe', 33]]);
+        
+        $res['eachSpread'] = $collection->eachSpread(function ($name, $age) {
+            //
+        });
+        
+        // 23. every 方法可用于验证集合中的每一个元素是否通过指定的条件测试
+        // false
+        $res['every'] = collect([1, 2, 3, 4])->every(function ($value, $key) {
+            return $value > 2;
+        });
+            
+        // 24. except 方法返回集合中除了指定键之外的所有集合项
+        $collection = collect(['product_id' => 1, 'price' => 100, 'discount' => false]);
+        
+        $filtered = $collection->except(['price', 'discount']);
+        
+        // ['product_id' => 1]
+        $res['except'] = $filtered->all();
+        
+       // 25. filter 方法使用给定的回调函数过滤集合，只保留那些通过指定条件测试的集合项
+        $collection = collect([1, 2, 3, 4]);
+        
+        $filtered = $collection->filter(function ($value, $key) {
+            return $value > 2;
+        });
+        
+        // [3, 4]
+        $res['filter'] = $filtered->all();
 
         dump($res);
         

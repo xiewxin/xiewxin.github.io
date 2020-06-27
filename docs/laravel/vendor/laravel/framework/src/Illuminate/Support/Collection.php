@@ -287,6 +287,7 @@ class Collection implements ArrayAccess, Enumerable
 
     /**
      * Retrieve duplicate items from the collection.
+     * 从集合中检索重复的项目
      *
      * @param  callable|null  $callback
      * @param  bool  $strict
@@ -294,15 +295,19 @@ class Collection implements ArrayAccess, Enumerable
      */
     public function duplicates($callback = null, $strict = false)
     {
+        // 獲取集合的每個元素
         $items = $this->map($this->valueRetriever($callback));
 
+        // 去除重複項
         $uniqueItems = $items->unique(null, $strict);
 
+        // 獲取比較器
         $compare = $this->duplicateComparator($strict);
 
         $duplicates = new static;
 
         foreach ($items as $key => $value) {
+            // 去除不為空且不符合要求的重複元素
             if ($uniqueItems->isNotEmpty() && $compare($value, $uniqueItems->first())) {
                 $uniqueItems->shift();
             } else {
@@ -321,11 +326,13 @@ class Collection implements ArrayAccess, Enumerable
      */
     public function duplicatesStrict($callback = null)
     {
+        // 嚴格的duplicates
         return $this->duplicates($callback, true);
     }
 
     /**
      * Get the comparison function to detect duplicates.
+     * 获取比较功能以检测重复项。
      *
      * @param  bool  $strict
      * @return \Closure
@@ -352,11 +359,14 @@ class Collection implements ArrayAccess, Enumerable
     public function except($keys)
     {
         if ($keys instanceof Enumerable) {
+            // 獲取可枚舉的所有元素
             $keys = $keys->all();
         } elseif (! is_array($keys)) {
+            // 獲取參數鍵值
             $keys = func_get_args();
         }
 
+        // 過濾集合中的知性元素
         return new static(Arr::except($this->items, $keys));
     }
 
@@ -368,10 +378,12 @@ class Collection implements ArrayAccess, Enumerable
      */
     public function filter(callable $callback = null)
     {
+        // 如設置回調則按照回調過濾
         if ($callback) {
             return new static(Arr::where($this->items, $callback));
         }
 
+        // 去除空
         return new static(array_filter($this->items));
     }
 

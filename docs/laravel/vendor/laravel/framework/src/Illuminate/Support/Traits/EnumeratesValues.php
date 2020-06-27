@@ -200,13 +200,16 @@ trait EnumeratesValues
 
     /**
      * Execute a callback over each item.
+     * 对每个项目执行回调
      *
      * @param  callable  $callback
      * @return $this
      */
     public function each(callable $callback)
     {
+        // 內部調用foreach循環
         foreach ($this as $key => $item) {
+            // 是否跳出循環
             if ($callback($item, $key) === false) {
                 break;
             }
@@ -217,12 +220,14 @@ trait EnumeratesValues
 
     /**
      * Execute a callback over each nested chunk of items.
+     * 对每个嵌套的项目块执行回调
      *
      * @param  callable  $callback
      * @return static
      */
     public function eachSpread(callable $callback)
     {
+        // 對每個集合進行回調處理
         return $this->each(function ($chunk, $key) use ($callback) {
             $chunk[] = $key;
 
@@ -240,10 +245,12 @@ trait EnumeratesValues
      */
     public function every($key, $operator = null, $value = null)
     {
+        // 只設置了一個參數
         if (func_num_args() === 1) {
+            
             $callback = $this->valueRetriever($key);
-
             foreach ($this as $k => $v) {
+                // 循環對比是否符合，有一個不符合就是false
                 if (! $callback($v, $k)) {
                     return false;
                 }
