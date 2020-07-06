@@ -418,6 +418,7 @@ class Collection implements ArrayAccess, Enumerable
      */
     public function flip()
     {
+        // 使用array_flip，對集合數據值鍵對換
         return new static(array_flip($this->items));
     }
 
@@ -429,10 +430,12 @@ class Collection implements ArrayAccess, Enumerable
      */
     public function forget($keys)
     {
+        // 去除指定的n個鍵
         foreach ((array) $keys as $key) {
             $this->offsetUnset($key);
         }
 
+        // 返回處理後結合
         return $this;
     }
 

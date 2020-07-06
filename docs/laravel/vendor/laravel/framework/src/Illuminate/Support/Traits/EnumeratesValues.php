@@ -272,6 +272,7 @@ trait EnumeratesValues
      */
     public function firstWhere($key, $operator = null, $value = null)
     {
+        // 使用回調校驗第一個滿足條件的數據
         return $this->first($this->operatorForWhere(...func_get_args()));
     }
 
@@ -323,6 +324,7 @@ trait EnumeratesValues
      */
     public function flatMap(callable $callback)
     {
+        // 使用map回到處理集合中的每一項數據
         return $this->map($callback)->collapse();
     }
 

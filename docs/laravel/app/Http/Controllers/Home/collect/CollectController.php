@@ -229,6 +229,58 @@ class CollectController extends Controller
         
         // [3, 4]
         $res['filter'] = $filtered->all();
+        
+        // 26. first 方法返回集合中通过指定条件测试的第一个元素
+        // 3
+        $res['first'] = collect([1, 2, 3, 4])->first(function ($value, $key) {
+            return $value > 2;
+        });
+
+        
+        // 27. firstWhere 方法返回集合中含有指定键 / 值对的第一个元素
+        // ['name' => 'Linda', 'age' => 14]
+        $collection = collect([
+            ['name' => 'Regena', 'age' => null],
+            ['name' => 'Linda', 'age' => 14],
+            ['name' => 'Diego', 'age' => 23],
+            ['name' => 'Linda', 'age' => 84],
+        ]);
+        
+        $res['firstWhere'] = $collection->firstWhere('name', 'Linda');
+        
+        
+        
+        // 28. flatMap 方法遍历集合并将其中的每个值传递到给定的回调函数。
+        // 可以通过回调函数修改集合项并返回它们，从而形成一个被修改过的新集合。
+        // 然后，集合转化的数组是同级的
+        // ['name' => 'SALLY', 'school' => 'ARKANSAS', 'age' => '28'];
+        $collection = collect([
+            ['name' => 'Sally'],
+            ['school' => 'Arkansas'],
+            ['age' => 28]
+        ]);
+        
+        $flattened = $collection->flatMap(function ($values) {
+            return array_map('strtoupper', $values);
+        });
+            
+        $res['flatMap'] = $flattened->all();
+        
+        // 29. flip 方法将集合的键和对应的值进行互换
+        // ['taylor' => 'name', 'laravel' => 'framework']
+        $collection = collect(['name' => 'taylor', 'framework' => 'laravel']);
+        
+        $flipped = $collection->flip();
+        
+        $res['flip'] = $flipped->all();
+        
+        // 30. forget 方法将通过指定的键来移除集合中对应的内容
+        // ['framework' => 'laravel']
+        $collection = collect(['name' => 'taylor', 'framework' => 'laravel']);
+        
+        $collection->forget('name');
+        
+        $res['forget'] = $collection->all();
 
         dump($res);
         
