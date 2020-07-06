@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://xiewxin.github.io/</id>
     <title>xiewixn blog</title>
-    <updated>2020-06-27T15:58:12.877Z</updated>
+    <updated>2020-07-06T17:58:19.187Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="http://xiewxin.github.io/"/>
     <link rel="self" href="http://xiewxin.github.io/atom.xml"/>
@@ -526,6 +526,79 @@ $collection-&gt;filter()-&gt;all();
 // [1, 2, 3]
 </code></pre>
 <p><code>filter</code> 对应的是 reject 方法。</p>
+<h4 id="first"><code>first()</code></h4>
+<p><code>first</code> 方法返回集合中通过指定条件测试的第一个元素：</p>
+<pre><code>collect([1, 2, 3, 4])-&gt;first(function ($value, $key) {
+    return $value &gt; 2;
+});
+
+// 3
+</code></pre>
+<p>你也可以不传入参数调用 <code>first</code> 方法来获取集合中的第一个元素。如果集合为空，则会返回 <code>null</code> ：</p>
+<pre><code>collect([1, 2, 3, 4])-&gt;first();
+
+// 1
+</code></pre>
+<h4 id="firstwhere"><code>firstWhere()</code></h4>
+<p><code>firstWhere</code> 方法返回集合中含有指定键 / 值对的第一个元素：</p>
+<pre><code>$collection = collect([
+    ['name' =&gt; 'Regena', 'age' =&gt; null],
+    ['name' =&gt; 'Linda', 'age' =&gt; 14],
+    ['name' =&gt; 'Diego', 'age' =&gt; 23],
+    ['name' =&gt; 'Linda', 'age' =&gt; 84],
+]);
+
+$collection-&gt;firstWhere('name', 'Linda');
+
+// ['name' =&gt; 'Linda', 'age' =&gt; 14]
+</code></pre>
+<p>你也可以使用运算符来调用 <code>firstWhere</code> 方法：</p>
+<pre><code>$collection-&gt;firstWhere('age', '&gt;=', 18);
+
+// ['name' =&gt; 'Diego', 'age' =&gt; 23]
+</code></pre>
+<p>和 <code>where</code> 方法一样，你可以将一个参数传递给 <code>firstWhere</code> 方法。在这种情况下， <code>firstWhere</code> 方法将返回指定键的值为「真」的第一个集合项：</p>
+<pre><code>$collection-&gt;firstWhere('age');
+
+// ['name' =&gt; 'Linda', 'age' =&gt; 14]
+</code></pre>
+<h4 id="flatmap"><code>flatMap()</code></h4>
+<p><code>flatMap</code> 方法遍历集合并将其中的每个值传递到给定的回调函数。可以通过回调函数修改集合项并返回它们，从而形成一个被修改过的新集合。然后，集合转化的数组是同级的：</p>
+<pre><code>$collection = collect([
+    ['name' =&gt; 'Sally'],
+    ['school' =&gt; 'Arkansas'],
+    ['age' =&gt; 28]
+]);
+
+$flattened = $collection-&gt;flatMap(function ($values) {
+    return array_map('strtoupper', $values);
+});
+
+$flattened-&gt;all();
+
+// ['name' =&gt; 'SALLY', 'school' =&gt; 'ARKANSAS', 'age' =&gt; '28'];
+</code></pre>
+<h4 id="flip"><code>flip()</code></h4>
+<p><code>flip</code> 方法将集合的键和对应的值进行互换：</p>
+<pre><code>$collection = collect(['name' =&gt; 'taylor', 'framework' =&gt; 'laravel']);
+
+$flipped = $collection-&gt;flip();
+
+$flipped-&gt;all();
+
+// ['taylor' =&gt; 'name', 'laravel' =&gt; 'framework']
+</code></pre>
+<h4 id="forget"><code>forget()</code></h4>
+<p><code>forget</code> 方法将通过指定的键来移除集合中对应的内容：</p>
+<pre><code>$collection = collect(['name' =&gt; 'taylor', 'framework' =&gt; 'laravel']);
+
+$collection-&gt;forget('name');
+
+$collection-&gt;all();
+
+// ['framework' =&gt; 'laravel']
+</code></pre>
+<p>注意：与大多数集合的方法不同的是， <code>forget</code> 不会返回修改后的新集合；它会直接修改原集合。</p>
 ]]></content>
     </entry>
     <entry>
