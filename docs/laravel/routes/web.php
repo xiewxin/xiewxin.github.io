@@ -25,4 +25,13 @@ Route::group(['prefix' => 'home', 'namespace' => 'Home'], function () {
     Route::group(['prefix' => '/collect', 'namespace' => 'Collect', 'as' => 'home.collect.'], function () {
         Route::any('/', 'CollectController@index');
     });
+    
+    // 練習
+    Route::group(['prefix' => '/exercise', 'namespace' => 'Exercise', 'as' => 'home.exercise.'], function () {
+        Route::any('/collect1', 'CollectController@collect1');
+        Route::any('/collect2', 'CollectController@collect2');
+        Route::any('/collect3', 'CollectController@collect3');
+        Route::any('/collect4', 'CollectController@collect4');
+        Route::any('/collect5', 'CollectController@collect5');
+    });
 });
