@@ -22,24 +22,19 @@ class CollectController extends Controller
      */
     public function collect1(Request $request)
     {
-        $numbers = $request->get('numbers', 'X,XL,XXL');
-        $colors  = $request->get('colors', '红色,蓝色,紫色');
+        $arrs = $request->get('arrs', [
+            ['X', 'XL', 'XXL'], 
+            ['红色', '蓝色', '紫色'],
+            ['1', '2', '3']
+        ]);
         
-        // A. 參數整理
-        $numbers = collect(explode(',', $numbers))
-            ->unique()->filter(function ($value) {
-                return ! empty($value);
-            });
-        $colors  = collect(explode(',', $colors))
-            ->unique()->filter(function ($value) {
-                return ! empty($value);
-            })->all();
-        
-        // B. 笛卡爾積    
+        $collect = collect($arrs);
+   
         return response()->json([
             'status' => 1, 
             'msg'    => '請求成功', 
-            'data'   => $numbers->crossJoin($colors)->all()
+            'data'   => collect($collect->shift())
+                ->crossJoin(...$collect->all())->all()
         ]);
     }
     
@@ -54,7 +49,7 @@ class CollectController extends Controller
         $arr = [
             ["id" => 1, "name" => "张三", "age" => 39, "gender" => "M", "weight" => 130],
             ["id" => 2, "name" => "李四", "age" => 25, "gender" => "F", "weight" => 120],
-            ["id" => 3, "name" => "王五", "age" => 18, "gender" => "M", "weight" => 150],
+            ["id" => 3, "name" => "王五", "age" => 19, "gender" => "M", "weight" => 150],
             ["id" => 4, "name" => "陈六", "age" => 18, "gender" => "M", "weight" => 135],
             ["id" => 5, "name" => "周七", "age" => 18, "gender" => "M", "weight" => 135],
         ];
@@ -62,11 +57,11 @@ class CollectController extends Controller
         // B. 數據整理
         $res = collect($arr)->where('gender', 'M')
             ->shuffle()
-            ->sortByDesc('age')
             ->sortBy('weight')
+            ->sortByDesc('age')
             ->keyBy('id')
             ->all();
-        
+
         return response()->json([
             'status' => 1,
             'msg'    => '請求成功',
