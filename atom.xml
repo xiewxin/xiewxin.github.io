@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://xiewxin.github.io/</id>
     <title>xiewixn blog</title>
-    <updated>2020-07-06T17:58:19.187Z</updated>
+    <updated>2020-07-18T08:52:31.930Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="http://xiewxin.github.io/"/>
     <link rel="self" href="http://xiewxin.github.io/atom.xml"/>
@@ -10,6 +10,135 @@
     <logo>http://xiewxin.github.io/images/avatar.png</logo>
     <icon>http://xiewxin.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, xiewixn blog</rights>
+    <entry>
+        <title type="html"><![CDATA[請求1]]></title>
+        <id>http://xiewxin.github.io/post/qing-qiu-1/</id>
+        <link href="http://xiewxin.github.io/post/qing-qiu-1/">
+        </link>
+        <updated>2020-07-18T08:51:19.000Z</updated>
+        <content type="html"><![CDATA[<p>要通过依赖注入获取当前 HTTP 请求实例，你应该在控制器上引入 <code>Illuminate\Http\Request</code> 类。传入的请求实例将会由 服务容器 自动注入：</p>
+<pre><code>&lt;?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class UserController extends Controller
+{
+    /**
+     * Store a new user.
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function store(Request $request)
+    {
+        $name = $request-&gt;input('name');
+
+        //
+    }
+
+}
+</code></pre>
+<h4 id="检索请求路径">检索请求路径</h4>
+<p><code>path</code> 方法返回请求的路径信息。因此，如果接收到的请求目标是 <code>http://xiewxin.lv.com/home/request</code>，则 <code>path</code> 方法会返回 <code>home/request</code>：</p>
+<pre><code>// 1. path 方法返回请求的路径信息。因此，如果接收到的请求
+// 目标是 http://xiewxin.lv.com/home/request，
+// 则 path 方法会返回 home/request
+$res['path'] = $request-&gt;path();
+</code></pre>
+<p><code>is</code> 方法验证请求的路径是否与给定的模式匹配。使用此方法时，可以将 <code>*</code> 字符作为通配符：</p>
+<pre><code>if ($request-&gt;is('admin/*')) {
+    //
+}
+</code></pre>
+<h4 id="获取请求-url">获取请求 URL</h4>
+<p>要获取完整的请求 URL，你可以使用 <code>url</code> 或 <code>fullUrl</code> 方法。 <code>url</code> 方法返回不带查询条件的 URL，而 <code>fullUrl</code> 方法的返回包含查询条件字符串。</p>
+<pre><code>// 没有包含查询条件字符串
+$url = $request-&gt;url();
+
+// 包含查询条件字符串
+$url = $request-&gt;fullUrl();
+</code></pre>
+<h4 id="获取请求方法">获取请求方法</h4>
+<p><code>method</code> 方法将会返回请求的 HTTP 动词。 你也可以使用 <code>isMethod</code> 方法去验证 HTTP 动词与所给定的字符串是否匹配</p>
+<pre><code>$method = $request-&gt;method();
+
+if ($request-&gt;isMethod('post')) {
+    //
+}
+</code></pre>
+<h3 id="psr-7-请求">PSR-7 请求</h3>
+<p>PSR-7 标准指定了包括请求与响应在内的 HTTP 的消息接口。如果你想要获取 PSR-7 请求实例而不是 Laravel 请求， 那么你首先需要安装几个库。Laravel 使用 <em>Symfony HTTP Message Bridge</em> 组件将典型的 Laravel 请求和响应转换为 PSR-7 的兼容实现：</p>
+<pre><code>composer require symfony/psr-http-message-bridge
+composer require nyholm/psr7
+</code></pre>
+<p>安装这些库后，可以通过路由闭包和控制器方法的请求接口类型提示来获取 PSR-7 请求：</p>
+<pre><code>use Psr\Http\Message\ServerRequestInterface;
+
+Route::get('/', function (ServerRequestInterface $request) {
+    //
+});
+</code></pre>
+<h2 id="输入过滤-规范化">输入过滤 &amp; 规范化</h2>
+<p>默认情况下，Laravel 应用程序的全局中间件堆栈中包含了 <code>TrimStrings</code> 和 <code>ConvertEmptyStringsToNull</code> 中间件。 它们被放在 <code>App\Http\Kernel</code> 类的栈列表中。这些中间件将自动过滤掉请求中的字符串字段，并将空字符串字段转换为 <code>null</code>。 这样一来，你将不用担心路由和控制器的约束规范问题。</p>
+<p>如果你想禁用这些行为， 你可以在应用程序中 <code>App\Http\Kernel</code> 类的 <code>$middleware</code> 属性中移除这两个中间件。</p>
+<h2 id="获取输入">获取输入</h2>
+<p>当处理包含数组的表单时，可以使用 「.」 运算符来访问数组的数据：</p>
+<pre><code>$name = $request-&gt;input('products.0.name');
+
+$names = $request-&gt;input('products.*.name');
+</code></pre>
+<h4 id="从查询字符串获取输入">从查询字符串获取输入</h4>
+<p><code>input</code> 方法可以从整个请求体中获取数据（包括查询字符串）, 而 <code>query</code> 方法仅仅从查询字符串中获取输入值：</p>
+<pre><code>$name = $request-&gt;query('name');
+</code></pre>
+<h4 id="通过动态属性获取输入">通过动态属性获取输入</h4>
+<p>你也可以通过 <code>Illuminate\Http\Request</code> 接口实例的动态属性访问用户的输入。例如你的一个表单中包含 <code>name</code> 字段，则可以通过下面这种方式获取：</p>
+<pre><code>$name = $request-&gt;name;
+</code></pre>
+<h4 id="获取-json-输入">获取 JSON 输入</h4>
+<p>当向应用传递 JSON 请求时，只要将请求头中的 Content-Type 设置为 <code>application/json</code> 后你便可以使用 <code>input</code>方法来获取 JSON 数据。你也可以使用「.」语法获取 JSON 数组内容：</p>
+<pre><code>$name = $request-&gt;input('user.name');
+</code></pre>
+<h4 id="获取部分输入数据">获取部分输入数据</h4>
+<p>如果需要获取输入数据的子集，你可以使用 <code>only</code> 或 <code>except</code> 方法。它们接受单个 <code>array</code> 或者动态参数列表：</p>
+<pre><code>$input = $request-&gt;only(['username', 'password']);
+
+$input = $request-&gt;only('username', 'password');
+
+$input = $request-&gt;except(['credit_card']);
+
+$input = $request-&gt;except('credit_card');
+</code></pre>
+<h4 id="判断输入值是否存在">判断输入值是否存在</h4>
+<p>你可以使用 <code>has</code> 来判断当前请求中是否含有指定的值。如果请求中存在该值则 <code>has</code> 方法将会返回 <code>true</code>：</p>
+<pre><code>if ($request-&gt;has('name')) {
+    //
+}
+</code></pre>
+<p>当给定一个数组时，<code>has</code> 将会判断指定的值是否全部存在：</p>
+<pre><code>if ($request-&gt;has(['name', 'email'])) {
+    //
+}
+</code></pre>
+<p><code>hasAny</code> 方法将会在指定的值有一个存在的情况下返回 <code>true</code>：</p>
+<pre><code>if ($request-&gt;hasAny(['name', 'email'])) {
+    //
+}
+</code></pre>
+<p>如果你想要判断一个值在请求中是否存在，并且不为空，可以使用 <code>filled</code> 方法：</p>
+<pre><code>if ($request-&gt;filled('name')) {
+    //
+}
+</code></pre>
+<p>如果你想要判断一个值在请求中是否缺失，可以使用 missing 方法：</p>
+<pre><code>if ($request-&gt;missing('name')) {
+    //
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[集合]]></title>
         <id>http://xiewxin.github.io/post/ji-he/</id>
