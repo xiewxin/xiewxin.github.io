@@ -76,6 +76,7 @@ class Request extends SymfonyRequest implements Arrayable, ArrayAccess
 
     /**
      * Get the request method.
+     * 獲取當前請求類型
      *
      * @return string
      */
@@ -101,6 +102,7 @@ class Request extends SymfonyRequest implements Arrayable, ArrayAccess
      */
     public function url()
     {
+        // 獲取當前連接去除查詢參數部分
         return rtrim(preg_replace('/\?.*/', '', $this->getUri()), '/');
     }
 
@@ -111,10 +113,12 @@ class Request extends SymfonyRequest implements Arrayable, ArrayAccess
      */
     public function fullUrl()
     {
+        // 獲取當前請求查詢參數
         $query = $this->getQueryString();
 
         $question = $this->getBaseUrl().$this->getPathInfo() === '/' ? '/?' : '?';
 
+        // 返回全鏈接
         return $query ? $this->url().$question.$query : $this->url();
     }
 
@@ -135,11 +139,13 @@ class Request extends SymfonyRequest implements Arrayable, ArrayAccess
 
     /**
      * Get the current path info for the request.
+     * 获取请求的当前路径信息。
      *
      * @return string
      */
     public function path()
     {
+        // 取出兩邊/
         $pattern = trim($this->getPathInfo(), '/');
 
         return $pattern == '' ? '/' : $pattern;
@@ -147,11 +153,13 @@ class Request extends SymfonyRequest implements Arrayable, ArrayAccess
 
     /**
      * Get the current decoded path info for the request.
+     * 获取请求的当前解码路径信息。
      *
      * @return string
      */
     public function decodedPath()
     {
+        // 對當前路徑解碼
         return rawurldecode($this->path());
     }
 
@@ -183,14 +191,17 @@ class Request extends SymfonyRequest implements Arrayable, ArrayAccess
 
     /**
      * Determine if the current request URI matches a pattern.
+     * 确定当前请求URI是否与模式匹配
      *
      * @param  mixed  ...$patterns
      * @return bool
      */
     public function is(...$patterns)
     {
+        // 獲取解碼後的路徑
         $path = $this->decodedPath();
 
+        // 判斷是否包含查詢值包含返回true
         foreach ($patterns as $pattern) {
             if (Str::is($pattern, $path)) {
                 return true;

@@ -245,6 +245,7 @@ class Arr
 
     /**
      * Remove one or many array items from a given array using "dot" notation.
+     * 使用“点”符号从给定数组中删除一个或多个数组项。
      *
      * @param  array  $array
      * @param  array|string  $keys

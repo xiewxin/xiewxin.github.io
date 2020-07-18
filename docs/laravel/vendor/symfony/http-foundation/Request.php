@@ -839,6 +839,7 @@ class Request
 
     /**
      * Returns the path being requested relative to the executed script.
+     * 返回相对于已执行脚本的请求路径
      *
      * The path info always starts with a /.
      *
@@ -883,6 +884,7 @@ class Request
 
     /**
      * Returns the root URL from which this request is executed.
+     * 返回执行此请求的根URL
      *
      * The base URL never ends with a /.
      *
@@ -1237,8 +1239,10 @@ class Request
             return $this->method;
         }
 
+        // 獲取請求體裡的請求類型，默認get
         $this->method = strtoupper($this->server->get('REQUEST_METHOD', 'GET'));
 
+        // 不為post直接返回
         if ('POST' !== $this->method) {
             return $this->method;
         }
@@ -1437,6 +1441,7 @@ class Request
      */
     public function isMethod(string $method)
     {
+        // 比較當前類型和給定類型是否一致
         return $this->getMethod() === strtoupper($method);
     }
 
@@ -1896,11 +1901,13 @@ class Request
      */
     protected function preparePathInfo()
     {
+        // 獲取請求的URI
         if (null === ($requestUri = $this->getRequestUri())) {
             return '/';
         }
 
         // Remove the query string from REQUEST_URI
+        // 移除查詢參數
         if (false !== $pos = strpos($requestUri, '?')) {
             $requestUri = substr($requestUri, 0, $pos);
         }
@@ -1908,10 +1915,12 @@ class Request
             $requestUri = '/'.$requestUri;
         }
 
+        // 如當前連接無根url則直接返回
         if (null === ($baseUrl = $this->getBaseUrl())) {
             return $requestUri;
         }
 
+        // 返回根url前面的路徑部分
         $pathInfo = substr($requestUri, \strlen($baseUrl));
         if (false === $pathInfo || '' === $pathInfo) {
             // If substr() returns false then PATH_INFO is set to an empty string

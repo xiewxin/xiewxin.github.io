@@ -26,6 +26,11 @@ Route::group(['prefix' => 'home', 'namespace' => 'Home'], function () {
         Route::any('/', 'CollectController@index');
     });
     
+    // 請求
+    Route::group(['prefix' => '/request', 'namespace' => 'Request', 'as' => 'home.request.'], function () {
+        Route::any('/', 'RequestController@index');
+    });
+    
     // 練習
     Route::group(['prefix' => '/exercise', 'namespace' => 'Exercise', 'as' => 'home.exercise.'], function () {
         Route::any('/collect1', 'CollectController@collect1');

@@ -82,6 +82,7 @@ trait InteractsWithInput
 
         $input = $this->all();
 
+        // 檢索是否包含設置的key
         foreach ($keys as $value) {
             if (! Arr::has($input, $value)) {
                 return false;
@@ -99,6 +100,7 @@ trait InteractsWithInput
      */
     public function hasAny($keys)
     {
+        // 檢索請求參數裡，有一個檢索的key就返回真
         $keys = is_array($keys) ? $keys : func_get_args();
 
         $input = $this->all();
@@ -116,6 +118,7 @@ trait InteractsWithInput
     {
         $keys = is_array($key) ? $key : func_get_args();
 
+        // 檢索設置key在輸入數據裡是否存在且不為空
         foreach ($keys as $value) {
             if ($this->isEmptyString($value)) {
                 return false;
@@ -152,6 +155,7 @@ trait InteractsWithInput
      */
     public function missing($key)
     {
+        // has的反函數，沒有檢索的key則返回真
         $keys = is_array($key) ? $key : func_get_args();
 
         return ! $this->has($keys);
@@ -188,6 +192,7 @@ trait InteractsWithInput
      */
     public function all($keys = null)
     {
+        // 所有的請求參數數組
         $input = array_replace_recursive($this->input(), $this->allFiles());
 
         if (! $keys) {
@@ -196,6 +201,7 @@ trait InteractsWithInput
 
         $results = [];
 
+        // 如設置了可以，則僅返回設置的數據
         foreach (is_array($keys) ? $keys : func_get_args() as $key) {
             Arr::set($results, $key, Arr::get($input, $key));
         }
@@ -205,6 +211,7 @@ trait InteractsWithInput
 
     /**
      * Retrieve an input item from the request.
+     * 从请求中检索输入项。
      *
      * @param  string|null  $key
      * @param  mixed  $default
@@ -212,6 +219,7 @@ trait InteractsWithInput
      */
     public function input($key = null, $default = null)
     {
+        // 檢索是否有輸入值得內容，有則返回，如不設置檢索值則返回所有的輸入值
         return data_get(
             $this->getInputSource()->all() + $this->query->all(), $key, $default
         );
@@ -245,6 +253,7 @@ trait InteractsWithInput
 
         $placeholder = new stdClass;
 
+        // 過濾掉非設置內容
         foreach (is_array($keys) ? $keys : func_get_args() as $key) {
             $value = data_get($input, $key, $placeholder);
 
@@ -268,6 +277,7 @@ trait InteractsWithInput
 
         $results = $this->all();
 
+        // 請求參數裡如包含設置key則刪除並返回處理後的數組
         Arr::forget($results, $keys);
 
         return $results;
@@ -275,6 +285,7 @@ trait InteractsWithInput
 
     /**
      * Retrieve a query string item from the request.
+     * 从请求中检索查询字符串项。
      *
      * @param  string|null  $key
      * @param  string|array|null  $default
@@ -282,6 +293,7 @@ trait InteractsWithInput
      */
     public function query($key = null, $default = null)
     {
+        // 從查詢源檢索數據
         return $this->retrieveItem('query', $key, $default);
     }
 
@@ -397,6 +409,7 @@ trait InteractsWithInput
 
     /**
      * Retrieve a parameter item from a given source.
+     * 从给定的源检索参数项。
      *
      * @param  string  $source
      * @param  string  $key
