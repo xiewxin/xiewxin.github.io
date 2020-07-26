@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://xiewxin.github.io/</id>
     <title>xiewixn blog</title>
-    <updated>2020-07-18T08:52:45.244Z</updated>
+    <updated>2020-07-26T13:45:51.485Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="http://xiewxin.github.io/"/>
     <link rel="self" href="http://xiewxin.github.io/atom.xml"/>
@@ -10,6 +10,70 @@
     <logo>http://xiewxin.github.io/images/avatar.png</logo>
     <icon>http://xiewxin.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, xiewixn blog</rights>
+    <entry>
+        <title type="html"><![CDATA[响应]]></title>
+        <id>http://xiewxin.github.io/post/xiang-ying/</id>
+        <link href="http://xiewxin.github.io/post/xiang-ying/">
+        </link>
+        <updated>2020-07-26T13:44:54.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="创建响应">创建响应</h2>
+<h4 id="字符串-数组">字符串 &amp; 数组</h4>
+<p>所有路由和控制器处理完业务逻辑之后都会返回一个发送到用户浏览器的响应，Laravel 提供了多种不同的方式来返回响应，最基本的响应就是从路由或控制器返回一个简单的字符串，框架会自动将这个字符串转化为一个完整的 HTTP 响应：</p>
+<pre><code>Route::get('/', function () {
+    return 'Hello World';
+});
+</code></pre>
+<p>除了从路由或控制器返回字符串之外，还可以返回数组。框架会自动将数组转化为一个 JSON 响应：</p>
+<pre><code>Route::get('/', function () {
+    return [1, 2, 3];
+});
+</code></pre>
+<h4 id="response-对象">Response 对象</h4>
+<p>通常，我们并不只是从路由动作简单返回字符串和数组，大多数情况下，都会返回一个完整的 <code>Illuminate\Http\Response</code> 实例或 视图。</p>
+<p>返回完整的 <code>Response</code> 实例允许你自定义响应的 HTTP 状态码和响应头信息。</p>
+<p><code>Response</code> 实例 继承自 <code>Symfony\Component\HttpFoundation\Response</code> 类， 该类提供了各种构建 HTTP 响应的方法：</p>
+<pre><code>Route::get('home', function () {
+    return response('Hello World', 200)
+                  -&gt;header('Content-Type', 'text/plain');
+});
+</code></pre>
+<h4 id="添加响应头">添加响应头</h4>
+<p>大部分的响应方法都是可链式调用的，使得创建响应实例的过程更具可读性。例如，你可以在响应返回给用户前使用 <code>header</code> 方法为其添加一系列的头信息：</p>
+<pre><code>return response($content)
+            -&gt;header('Content-Type', $type)
+            -&gt;header('X-Header-One', 'Header Value')
+            -&gt;header('X-Header-Two', 'Header Value');
+</code></pre>
+<p>或者，你可以使用 <code>withHeaders</code> 方法来指定要添加到响应的头信息数组：</p>
+<h5 id="缓存控制中间件">缓存控制中间件</h5>
+<p>Laravel 内置了一个 <code>cache.headers</code> 中间件，可以用来快速地为路由组设置 <code>Cache-Control</code> 头信息。如果在指令集中声明了 <code>etag</code>，Laravel 会自动将 ETag 标识符设置为响应内容的 MD5 哈希值：</p>
+<pre><code>Route::middleware('cache.headers:public;max_age=2628000;etag')-&gt;group(function () {
+    Route::get('privacy', function () {
+        // ...
+    });
+
+    Route::get('terms', function () {
+        // ...
+    });
+
+});
+</code></pre>
+<h4 id="添加-cookies-到响应">添加 Cookies 到响应</h4>
+<p>你可以使用响应上的 <code>cookie</code> 方法轻松地将为响应增加 Cookies。例如，你可以像这样使用 <code>cookie</code> 方法生成一个 cookie 并轻松地将其附加到响应上：</p>
+<pre><code>return response($content)
+                -&gt;header('Content-Type', $type)
+                -&gt;cookie('name', 'value', $minutes);
+</code></pre>
+<p><code>cookie</code> 方法还接受一些不太频繁使用的参数。通常，这些参数与原生 PHP 的 setcookie方法的参数有着相同的目的和含义：</p>
+<pre><code>-&gt;cookie($name, $value, $minutes, $path, $domain, $secure, $httpOnly)
+</code></pre>
+<p>或者，你可以使用 <code>Cookie</code> facade 「队列」， <code>Cookie</code> 以附加到应用程序的传出响应。 <code>queue</code> 方法接受一个 <code>Cookie</code> 实例或创建 <code>Cookie</code> 实例所需的参数。 这些 cookie 在发送到浏览器之前会附加到传出响应中：</p>
+<pre><code>Cookie::queue(Cookie::make('name', 'value', $minutes));
+
+Cookie::queue('name', 'value', $minutes);
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[請求1]]></title>
         <id>http://xiewxin.github.io/post/qing-qiu-1/</id>
