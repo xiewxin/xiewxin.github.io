@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>ES - 地理查詢和分析特性 | xiewixn blog</title>
+<meta name="description" content="闲庭若步">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="http://xiewxin.github.io//favicon.ico?v=1597497528792">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="http://xiewxin.github.io//styles/main.css">
+
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="http://xiewxin.github.io/">xiewixn blog</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>ES - 地理查詢和分析特性</h1>
+            <p class="article-meta">
+              2020-08-15
+              
+            </p>
+            
+            <div class="post-content">
+              <p>相信大家對 <code>elasticsearch</code> (後面簡稱 <code>ES</code>) ，不管是前端還是後端，甚至是產品的小夥伴都不會陌生。它是時下流行的搜索引擎解決方案，他能幹什麼呢？</p>
+<p>​	1 提供快速的查詢</p>
+<p>​	2 確保結果的相關性</p>
+<p>​	3 非常精确的匹配</p>
+<p>​	這一切的一切帶來了了強大的搜索效率和精度以及良好的體驗，再加上它開源，容易上手，適用性廣，社區交流活躍文檔齊全等等等等，所以迅速的流行了起來。</p>
+<p>​	我們知道 <code>ES</code> 其實適用於許多場景，像大家最常接觸的文檔存儲查詢，再比如日誌存儲和索引等，今天向大家介紹的是 <code>ES</code> 地理數據存儲和分析特性，這塊大家可能接觸的相對沒有這麼多，本人也是因為行情的實價登錄功能的契機才開始用到一些，用了之後覺得體驗還是不錯的，相信結合大家的才智可以用到更多有意思的地方。</p>
+<p>​	在開始之前，先給大家看一下，我們的實價登錄長得是這樣的，這個模塊將社區的行情交易信息，地理信息於 <code>ES</code> 的地理查詢和分析特性結合了起來，讓用戶直觀的了解不同地區的房價情況。這是我們使用 <code>ES</code> 的地理特性完成的事情，讓大家對他能做什麼心裡有個數，具體見 https://market.591.com.tw 。下面我們將從 [地理查詢] 和 [地理數據聚合] 兩個方面向大家介紹 <code>ES</code> 的地理特性。</p>
+<figure data-type="image" tabindex="1"><img src="http://xiewxin.github.io//post-images/1597497366768.png" alt="591 實價登錄" loading="lazy"></figure>
+<h2 id="一-地理查詢相關">一、地理查詢相關</h2>
+<p>​	結合場景也許大家能夠更直觀的了解，假設大家的數據單位都有地理經緯度信息，在這個前提下我提出下面幾個場景。</p>
+<h3 id="1-地理邊界框查詢">1. 地理邊界框查詢</h3>
+<p>​	我們想要篩選出地圖中某個地理邊界框的數據，我們只要使用 <code>ES</code> 的 [地理邊界框查詢] <code>geo_bounding_box</code> 就可以輕鬆實現，我們需要做的就是把邊界框的左上坐標 <code>top_left</code> 和 右下坐標 <code>bottom_right</code> 給到 <code>ES</code> 就可以過濾出該邊界框的數據</p>
+<p>語句如下：</p>
+<pre><code>GET /market-community/_search
+{
+    &quot;query&quot;: {
+        &quot;bool&quot; : {
+            &quot;must&quot; : {
+                &quot;match_all&quot; : {}
+            },
+            &quot;filter&quot; : {
+                &quot;geo_bounding_box&quot; : {
+                    &quot;search.location&quot; : {
+                        &quot;top_left&quot; : {	// 左上坐標
+                            &quot;lat&quot; : 25.03635457300217,
+                            &quot;lon&quot; : 121.55181610152857
+                        },
+                        &quot;bottom_right&quot; : {	// 右下坐標
+                            &quot;lat&quot; : 25.03413425895166,
+                            &quot;lon&quot; : 121.5612842657818
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<p>然後我們就能得到想要的數據啦~</p>
+<figure data-type="image" tabindex="2"><img src="http://xiewxin.github.io//post-images/1597497322151.png" alt="地理邊界框查詢" loading="lazy"></figure>
+<h3 id="2-地理多邊形查詢">2. 地理多邊形查詢</h3>
+<p>​	我們想要篩選出任意多邊形地理邊界內的數據，那我們就可以使用 <code>ES</code> 的 [地理多邊形查詢] <code>geo_polygon</code> ，把我們的繪製的多邊形的坐標點按繪製順序都給到 <code>ES</code> 就可以了，但這裡需要注意坐標點一定要按繪製順序給到 <code>ES</code>，因為 <code>ES</code> 是按順序將點連接成圖形的，否則結果可能就不是我們想要的了~，語句如下：</p>
+<pre><code class="language-console">GET /market-community/_search
+{
+    &quot;query&quot;: {
+        &quot;bool&quot; : {
+            &quot;must&quot; : {
+                &quot;match_all&quot; : {}
+            },
+            &quot;filter&quot; : {
+                &quot;geo_polygon&quot; : {
+                    &quot;search.location&quot; : {	// 注意坐標點要按順序，順時針逆時針均可
+                        &quot;points&quot; : [
+                            [121.55823134507727, 25.03582564975867],		
+                            [121.55819379415107, 25.035840230943773],
+                            [121.5589394482572, 25.035786766589958],
+                            [121.55828498925757, 25.035840230943773],
+                            ....
+                            [121.55826889600348, 25.035840230943773],
+                            [121.5582528027494, 25.035835370548934],
+                            [121.55824207391333, 25.035835370548934],
+                            [121.55823134507727, 25.035835370548934]
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<p>結果當然顯而易見：</p>
+<figure data-type="image" tabindex="3"><img src="http://xiewxin.github.io//post-images/1597497401496.png" alt="地理多邊形查詢" loading="lazy"></figure>
+<h3 id="3-地理距離查詢">3. 地理距離查詢</h3>
+<p>​	我們想要得到坐標點方圓一公里的社區呢？要做的也很簡單，只需要使用 [地理距離查詢] <code>geo_distance</code> ，比如獲取坐標 lat:25.036593627652884, lng:121.5577666374389 方圓100m的的社區。</p>
+<p>語句：</p>
+<pre><code class="language-console">GET /market-community/_search
+{
+    &quot;query&quot;: {
+        &quot;bool&quot; : {
+            &quot;must&quot; : {
+                &quot;match_all&quot; : {}
+            },
+            &quot;filter&quot; : {
+                &quot;geo_distance&quot; : {
+                    &quot;distance&quot; : &quot;100m&quot;,
+                    &quot;search.location&quot; : {
+                        &quot;lat&quot; : 25.036593627652884,
+                        &quot;lon&quot; : 121.5577666374389
+                    }
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<p>結果示意：</p>
+<figure data-type="image" tabindex="4"><img src="http://xiewxin.github.io//post-images/1597497442041.png" alt="地理距離查詢" loading="lazy"></figure>
+<p>是不是很簡單呢~~只要使用 <code>ES</code> 我們就能輕鬆完成各種基於地理位置的查詢，讓我們的數據更具代表性和說服力。</p>
+<h2 id="二-地理數據聚合">二、地理數據聚合</h2>
+<p>​	地理數據聚合 <code>ES</code> 提供了挺多有意思的聚合查詢，[地理邊界聚合] 可以為數據集合計算地理邊界框，把你的數據框起來；[地理距離聚合] 可以獲取坐標點不同範圍距離數據區分出來，比如0<sub>1km，1km</sub>2km。這裡只做拋磚引玉的舉兩個例子。</p>
+<h3 id="1-geohash網格聚合">1. GeoHash網格聚合</h3>
+<p>​	如果我們想將我們的數據分成若干個地理方塊，比如 152.9mx 152.4m ，那我們就可以使用 [GeoHash網格聚合] <code>geohash_grid</code> 的特性，它能幫我們的數據計算出若干個 152.9mx 152.4m 範圍的集合。152.9mx 152.4m 在網格聚合精度級別表裡是7（精度後面再說明）。語句如下：</p>
+<pre><code class="language-console">POST /market-community/_search?size=0
+{
+    &quot;aggregations&quot; : {
+        &quot;large-grid&quot; : {
+            &quot;geohash_grid&quot; : {
+                &quot;field&quot; : &quot;search.location&quot;,
+                &quot;precision&quot; : 7
+            }
+        }
+    }
+}
+</code></pre>
+<p>返回結果如下：</p>
+<pre><code class="language-js">{
+    ...
+    &quot;aggregations&quot;: {
+        &quot;large-grid&quot;: {
+            &quot;buckets&quot;: [
+                {
+                    &quot;key&quot;:&quot;wsqqqn4&quot;,
+                    &quot;doc_count&quot;:5,
+    			},
+    			{
+                    &quot;key&quot;:&quot;wsqqqn1&quot;,
+                    &quot;doc_count&quot;:5,
+    			},
+    			{
+                    &quot;key&quot;:&quot;wsqqqje&quot;,
+                    &quot;doc_count&quot;:5,
+    			},
+                ...
+            ]
+        }
+    }
+}	
+</code></pre>
+<p>​	這樣我們就能比較方便的從數據中知道哪個 152.9mx 152.4m 範圍方塊裡數據最多，延伸的話可以知道平均每個地理方塊裡有多少數據，或者只根據這個範圍進行下一步操作。注意在默認的情況該聚合返回10000條數據，請在使用過程中留意該特性。</p>
+<p>​	目前該聚合支持12個精度，雖然它也能自定義，但實際還是根據這12個精度計算數據，所以與其自定義還是老實使用這12個精度吧...精度說明如下。</p>
+<table>
+<thead>
+<tr>
+<th><strong>GeoHash长度</strong></th>
+<th><strong>区域宽度x高度</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1个</td>
+<td>5,009.4公里x 4,992.6公里</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1,252.3公里x 624.1公里</td>
+</tr>
+<tr>
+<td>3</td>
+<td>156.5公里x 156公里</td>
+</tr>
+<tr>
+<td>4</td>
+<td>39.1公里x 19.5公里</td>
+</tr>
+<tr>
+<td>5</td>
+<td>4.9公里x 4.9公里</td>
+</tr>
+<tr>
+<td>6</td>
+<td>1.2公里x 609.4m</td>
+</tr>
+<tr>
+<td>7</td>
+<td>152.9mx 152.4m</td>
+</tr>
+<tr>
+<td>8</td>
+<td>38.2mx 19m</td>
+</tr>
+<tr>
+<td>9</td>
+<td>4.8mx 4.8m</td>
+</tr>
+<tr>
+<td>10</td>
+<td>1.2mx 59.5厘米</td>
+</tr>
+<tr>
+<td>11</td>
+<td>14.9厘米x 14.9厘米</td>
+</tr>
+<tr>
+<td>12</td>
+<td>3.7厘米x 1.9厘米</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-地心聚集">2. 地心聚集</h3>
+<p>​	[地心聚集] <code>geo_centroid</code> 是計算數據集合的加權質心，解決諸如方圓五公里社區最多的點在哪裡？大家最喜歡在哪裡吃麻辣燙？等問題，他能將你收集的大數據在地理層面有用武之地。在 591實際登陸 功能中就有計算每個 152.9mx 152.4m 地理方塊的質心用於地圖展示，也算是 [GeoHash網格聚合] 的延伸，語句如下：</p>
+<pre><code class="language-console">POST /market-community/_search
+{
+    &quot;aggs&quot; : {
+    	&quot;_point_aggs&quot; : {
+    		&quot;geohash_grid&quot; : {
+    			&quot;field&quot; : &quot;search.location&quot;,
+    			&quot;precision&quot; : 7,
+    			&quot;size&quot; : 500,
+    		},
+    		&quot;aggs&quot; : {
+    			&quot;_centroid&quot; : {
+                    &quot;geo_centroid&quot; : {
+                        &quot;field&quot; : &quot;search.location&quot; 
+                    }
+       			}
+    		}
+    	}
+    }
+}
+</code></pre>
+<p>返回結果如下</p>
+<pre><code>{
+    ...
+    &quot;aggregations&quot;: {
+        &quot;_point_aggs&quot;: {
+            &quot;buckets&quot;: [
+                {
+                    &quot;key&quot;:&quot;wsqqqn4&quot;,
+                    &quot;doc_count&quot;:5,
+                    &quot;_centroid&quot;:{
+                        &quot;location&quot;:{
+                            &quot;lat&quot;:25.038318903185427,
+                            &quot;lon&quot;:121.55637344531715
+                        },
+                        &quot;count&quot;:5
+                    }
+    			},
+    			{
+                    &quot;key&quot;:&quot;wsqqqn1&quot;,
+                    &quot;doc_count&quot;:5,
+                    &quot;_centroid&quot;:{
+                        &quot;location&quot;:{
+                            &quot;lat&quot;:25.03880675509572,
+                            &quot;lon&quot;:121.55491943657398
+                        },
+                        &quot;count&quot;:5
+                    }
+    			},
+    			{
+                    &quot;key&quot;:&quot;wsqqqje&quot;,
+                    &quot;doc_count&quot;:5,
+                    &quot;_centroid&quot;:{
+                        &quot;location&quot;:{
+                            &quot;lat&quot;:25.035851379856467,
+                            &quot;lon&quot;:121.5575652513653
+                        },
+                        &quot;count&quot;:5
+                    }
+    			},
+                ...
+            ]
+        }
+    }
+}		
+</code></pre>
+<p>我們可以將其展示到地圖上：</p>
+<figure data-type="image" tabindex="5"><img src="http://xiewxin.github.io//post-images/1597497481109.png" alt="地心聚集" loading="lazy"></figure>
+<p>​	<code>ES</code> 的地理特性還有許多，結合不同的場景也有許多的可能性，能讓你辛辛苦苦收集大數據不再那麼”幹“，讓數據更直觀更有趣更有用，這就是本次分享的內容，希望能給大家帶來一點啟發和幫助。</p>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="http://xiewxin.github.io/post/eloquent/">
+                <h3 class="post-title">
+                  ORM
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="http://xiewxin.github.io//images/avatar.png?v=1597497528792" class="no-responsive avatar">
+    <div class="text-muted">闲庭若步</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="http://xiewxin.github.io/post/es-di-li-cha-xun-he-fen-xi-te-xing/">ES - 地理查詢和分析特性</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="http://xiewxin.github.io/post/eloquent/">ORM</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="http://xiewxin.github.io/post/xiang-ying/">响应</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="http://xiewxin.github.io/post/qing-qiu-1/">請求1</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="http://xiewxin.github.io/post/ji-he/">集合</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="http://xiewxin.github.io/post/fu-zhu-han-shu/">辅助函数</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="http://xiewxin.github.io/post/about/">关于</a>
+            </li>
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/xiewxin/xiewxin.github.io" target="_blank">xiewxin/xiewxin.github.io</a> | <a class="rss" href="http://xiewxin.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>
