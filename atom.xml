@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://xiewxin.github.io/</id>
     <title>xiewixn blog</title>
-    <updated>2020-08-23T07:25:13.386Z</updated>
+    <updated>2020-08-23T07:41:49.511Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="http://xiewxin.github.io/"/>
     <link rel="self" href="http://xiewxin.github.io/atom.xml"/>
@@ -24,9 +24,9 @@
 <p>​	我们知道 <code>ES</code> 其实适用于许多场景，像大家最常接触的文档存储查询，再比如日志存储和索引等，今天向大家介绍的是 <code>ES</code> 地理数据存储和分析特性，这块大家可能接触的相对没有这么多，本人也是因为行情的实价登录功能的契机才开始用到一些，用了之后觉得体验还是不错的，相信结合大家的才智可以用到更多有意思的地方。</p>
 <p>​	在开始之前，先给大家看一下，我们的实价登录长得是这样的，这个模块将社区的行情交易信息，地理信息于 <code>ES</code> 的地理查询和分析特性结合了起来，让用户直观的了解不同地区的房价情况。这是我们使用 <code>ES</code> 的地理特性完成的事情，让大家对他能做什么心里有个数，具体见 https://market.591.com.tw 。下面我们将从 [地理查询] 和 [地理数据聚合] 两个方面向大家介绍 <code>ES</code> 的地理特性。</p>
 <figure data-type="image" tabindex="1"><img src="http://xiewxin.github.io//post-images/1597497366768.png" alt="591 实价登录" loading="lazy"></figure>
-<h2 id="一-地理查询相关">一、地理查询相关</h2>
+<h3 id="一-地理查询相关">一、地理查询相关</h3>
 <p>​	结合场景也许大家能够更直观的了解，假设大家的数据单位都有地理经纬度信息，在这个前提下我提出下面几个场景</p>
-<h3 id="1-地理边界框查询">1. 地理边界框查询</h3>
+<h4 id="1-地理边界框查询">1. 地理边界框查询</h4>
 <p>​	我们想要筛选出地图中某个地理边界框的数据，我们只要使用 <code>ES</code> 的 [地理边界框查询] <code>geo_bounding_box</code> 就可以轻松实现，我们需要做的就是把边界框的左上坐标 <code>top_left</code> 和右下坐标 <code>bottom_right</code> 给到 <code>ES</code> 就可以过滤出该边界框的数据。</p>
 <p>语句如下：</p>
 <pre><code>GET /market-community/_search
@@ -56,7 +56,7 @@
 </code></pre>
 <p>然后我们就能得到想要的数据啦~</p>
 <figure data-type="image" tabindex="2"><img src="http://xiewxin.github.io//post-images/1597497322151.png" alt="地理边界框查询" loading="lazy"></figure>
-<h3 id="2-地理多边形查询">2. 地理多边形查询</h3>
+<h4 id="2-地理多边形查询">2. 地理多边形查询</h4>
 <p>​	我们想要筛选出任意多边形地理边界内的数据，那我们就可以使用 <code>ES</code> 的 [地理多边形查询] <code>geo_polygon</code> ，把我们的绘制的多边形的坐标点按绘制顺序都给到 <code>ES</code> 就可以了，但这里需要注意坐标点一定要按绘制顺序给到 <code>ES</code>，因为 <code>ES</code> 是按顺序将点连接成图形的，否则结果可能就不是我们想要的了~，语句如下：</p>
 <pre><code class="language-console">GET /market-community/_search
 {
@@ -88,7 +88,7 @@
 </code></pre>
 <p>结果当然显而易见：</p>
 <figure data-type="image" tabindex="3"><img src="http://xiewxin.github.io//post-images/1597497401496.png" alt="地理多边形查询" loading="lazy"></figure>
-<h3 id="3-地理距离查询">3. 地理距离查询</h3>
+<h4 id="3-地理距离查询">3. 地理距离查询</h4>
 <p>​	我们想要得到坐标点方圆一公里的社区呢？要做的也很简单，只需要使用 [地理距离查询] <code>geo_distance</code> ，比如获取坐标 lat:25.036593627652884, lng:121.5577666374389 方圆100m的的社区。</p>
 <p>语句：</p>
 <pre><code class="language-console">GET /market-community/_search
@@ -114,9 +114,9 @@
 <p>结果示意：</p>
 <figure data-type="image" tabindex="4"><img src="http://xiewxin.github.io//post-images/1597497442041.png" alt="地理距离查询" loading="lazy"></figure>
 <p>是不是很简单呢~~只要使用 <code>ES</code> 我们就能轻松完成各种基于地理位置的查询，让我们的数据更具代表性和说服力。</p>
-<h2 id="二-地理数据聚合">二、地理数据聚合</h2>
+<h3 id="二-地理数据聚合">二、地理数据聚合</h3>
 <p>​	地理数据聚合 <code>ES</code> 提供了挺多有意思的聚合查询，[地理边界聚合] 可以为数据集合计算地理边界框，把你的数据框起来；[地理距离聚合] 可以获取坐标点不同范围距离数据区分出来，比如0~1km ，1km~2km。这里只做抛砖引玉的举两个例子。</p>
-<h3 id="1-geohash网格聚合">1. GeoHash网格聚合</h3>
+<h4 id="1-geohash网格聚合">1. GeoHash网格聚合</h4>
 <p>​	如果我们想将我们的数据分成若干个地理方块，比如 152.9mx 152.4m ，那我们就可以使用 [GeoHash网格聚合] <code>geohash_grid</code> 的特性，它能帮我们的数据计算出若干个 152.9mx 152.4m 范围的集合。 152.9mx 152.4m 在网格聚合精度级别表里是7（精度后面再说明）。语句如下：</p>
 <pre><code class="language-console">POST /market-community/_search?size=0
 {
@@ -214,7 +214,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="2-地心聚集">2. 地心聚集</h3>
+<h4 id="2-地心聚集">2. 地心聚集</h4>
 <p>​	[地心聚集] <code>geo_centroid</code> 是计算数据集合的加权质心，解决诸如方圆五公里社区最多的点在哪里？大家最喜欢在哪里吃麻辣烫？等问题，他能将你收集的大数据在地理层面有用武之地。在 591实际登陆 功能中就有计算每个 152.9mx 152.4m 地理方块的质心用于地图展示，也算是 [GeoHash网格聚合] 的延伸，语句如下：</p>
 <pre><code class="language-console">POST /market-community/_search
 {
